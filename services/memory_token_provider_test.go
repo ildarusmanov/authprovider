@@ -83,3 +83,82 @@ func TestFindByValue(t *testing.T) {
         t.Error("Undefined token can not be found")
     }
 }
+
+func TestDropToken(t *testing.T) {
+    var (
+        userId = "111"
+        tokenValue = "token-value-1"
+        scopeList = []string{"scope1", "scope2"}
+        lifeTime = 100
+    )
+
+    p := CreateNewMemoryTokenProvider()
+
+    token, err := p.AddToken(userId, tokenValue, scopeList, lifeTime)
+
+    if err != nil {
+        t.Error("Can not add new token")
+    }
+
+    err = p.DropToken(tokenValue)
+
+    if err != nil {
+        t.Error("Can not drop token")
+    }
+
+    _, err := p.FindByValue(tokenValue)
+
+    if err == nil {
+        t.Error("Token have not deleted")
+    }
+}
+
+func TestDropByUserId(t *testing.T) {
+    var (
+        userId = "111"
+        tokenValue = "token-value-1"
+        scopeList = []string{"scope1", "scope2"}
+        lifeTime = 100
+    )
+
+    p := CreateNewMemoryTokenProvider()
+
+    token, err := p.AddToken(userId, tokenValue, scopeList, lifeTime)
+
+    if err != nil {
+        t.Error("Can not add new token")
+    }
+
+    p.DropTokenByUserId(userId)
+
+    _, err := p.FindByValue(tokenValue)
+
+    if err == nil {
+        t.Error("Token have not deleted")
+    }
+}
+
+func TestDropAll(t *testing.T) {
+    var (
+        userId = "111"
+        tokenValue = "token-value-1"
+        scopeList = []string{"scope1", "scope2"}
+        lifeTime = 100
+    )
+
+    p := CreateNewMemoryTokenProvider()
+
+    token, err := p.AddToken(userId, tokenValue, scopeList, lifeTime)
+
+    if err != nil {
+        t.Error("Can not add new token")
+    }
+
+    p.DropAll()
+
+    _, err := p.FindByValue(tokenValue)
+
+    if err == nil {
+        t.Error("Token have not deleted")
+    }
+}
