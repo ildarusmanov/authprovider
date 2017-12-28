@@ -1,0 +1,85 @@
+package services
+
+import (
+    "testing"
+)
+
+func TestCreateNewMemoryTokenProvider(t *testing.T) {
+    p := CreateNewMemoryTokenProvider()
+
+    if p == nil {
+        t.Error("Provider have not created")
+    }
+}
+
+func TestAddToken(t *testing.T) {
+    var (
+        userId = "111"
+        tokenValue = "token-value-1"
+        scopeList = []string{"scope1", "scope2"}
+        otherScopeList = []string{"scope3", "scope4"}
+        lifeTime = 100
+    )
+
+    p := CreateNewMemoryTokenProvider()
+
+    token, err := p.AddToken(userId, tokenValue, scopeList, lifeTime)
+
+    if err != nil {
+        t.Error("Can not add token")
+    }
+
+    if token == nil {
+        t.Error("Empty token")
+    }
+
+    if token.GetTokenUserId() != userId {
+        t.Error("Invalid token user id")
+    }
+
+    if token.GetTokenValue() != tokenValue {
+        t.Error("Invalid token value")
+    }
+
+    if token.InScope(otherScopeList) {
+        t.Error("Wrong scope. extra scope accepted")
+    }
+
+    if !token.InScope(scopeList) {
+        t.Error("Valid scope not accepted")
+    }
+}
+
+func TestFindByValue(t *testing.T) {
+    var (
+        userId = "111"
+        tokenValue = "token-value-1"
+        anotherTokenValue = "token-value-2"
+        scopeList = []string{"scope1", "scope2"}
+        lifeTime = 100
+    )
+
+    p := CreateNewMemoryTokenProvider()
+
+    token, err := p.AddToken(userId, tokenValue, scopeList, lifeTime)
+
+    if err != nil {
+        t.Error("Can not add new token")
+    }
+
+    storedToken, err := p.FindByValue(tokenValue)
+
+    if err != nil {
+        t.Error("Can not newly aded token")
+    }
+
+    if storedToken.GetTokenValue() != token.GetTokenValue() {
+        t.Error("Tokens are not equal")
+    }
+
+    anotherStoredToken, err := p.FindByValue(anotherTokenValue)
+
+    if err == nil {
+        t.Error("Undefined token can not be found")
+    }
+}
