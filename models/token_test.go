@@ -44,9 +44,57 @@ func TestCreateNewToken(t *testing.T) {
 }
 
 func TestInScope(t *testing.T) {
-    t.Error("Test does not implemented")
+    var (
+        tokenValue = "token-value-1"
+        userId = "111"
+        scope = []string{"scope1", "scope2"}
+        anoherScope = []string{"scope3", "scope4"}
+        tokenTimestamp = time.Now().Unix()
+        lifetime = 1000
+    )
+
+    newToken := CreateNewToken(
+        userId,
+        tokenValue,
+        scope,
+        tokenTimestamp,
+        lifetime,
+    )
+
+    if newToken.InScope(anoherScope) {
+        t.Error("Wrong scope accepted")
+    }
+
+    if !newToken.InScope(scope) {
+        t.Error("Valid scope rejected")
+    }
 }
 
 func TestIsValid(t *testing.T) {
-    t.Error("Test does not implemented")
+    var (
+        tokenValue = "token-value-1"
+        userId = "111"
+        scope = []string{"scope1", "scope2"}
+        anoherScope = []string{"scope3", "scope4"}
+        tokenTimestamp = time.Now().Unix()
+        lifetime = 5
+    )
+
+    newToken := CreateNewToken(
+        userId,
+        tokenValue,
+        scope,
+        tokenTimestamp,
+        lifetime,
+    )
+    
+    if !newToken.IsValid() {
+        t.Error("Token expired too fast")
+    }
+
+    time.Sleep((lifetime + 1) * time.Second)
+
+    if newToken.IsValid() {
+        t.Error("Token must be expired")
+    }
 }
