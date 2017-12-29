@@ -1,164 +1,164 @@
 package services
 
 import (
-    "testing"
+	"testing"
 )
 
 func TestCreateNewMemoryTokenProvider(t *testing.T) {
-    p := CreateNewMemoryTokenProvider()
+	p := CreateNewMemoryTokenProvider()
 
-    if p == nil {
-        t.Error("Provider have not created")
-    }
+	if p == nil {
+		t.Error("Provider have not created")
+	}
 }
 
 func TestAddToken(t *testing.T) {
-    var (
-        userId = "111"
-        tokenValue = "token-value-1"
-        scopeList = []string{"scope1", "scope2"}
-        otherScopeList = []string{"scope3", "scope4"}
-        lifeTime = 100
-    )
+	var (
+		userId         = "111"
+		tokenValue     = "token-value-1"
+		scopeList      = []string{"scope1", "scope2"}
+		otherScopeList = []string{"scope3", "scope4"}
+		lifeTime       = 100
+	)
 
-    p := CreateNewMemoryTokenProvider()
+	p := CreateNewMemoryTokenProvider()
 
-    token, err := p.AddToken(userId, tokenValue, scopeList, lifeTime)
+	token, err := p.AddToken(userId, tokenValue, scopeList, lifeTime)
 
-    if err != nil {
-        t.Error("Can not add token")
-    }
+	if err != nil {
+		t.Error("Can not add token")
+	}
 
-    if token == nil {
-        t.Error("Empty token")
-    }
+	if token == nil {
+		t.Error("Empty token")
+	}
 
-    if token.GetTokenUserId() != userId {
-        t.Error("Invalid token user id")
-    }
+	if token.GetTokenUserId() != userId {
+		t.Error("Invalid token user id")
+	}
 
-    if token.GetTokenValue() != tokenValue {
-        t.Error("Invalid token value")
-    }
+	if token.GetTokenValue() != tokenValue {
+		t.Error("Invalid token value")
+	}
 
-    if token.InScope(otherScopeList) {
-        t.Error("Wrong scope. extra scope accepted")
-    }
+	if token.InScope(otherScopeList) {
+		t.Error("Wrong scope. extra scope accepted")
+	}
 
-    if !token.InScope(scopeList) {
-        t.Error("Valid scope not accepted")
-    }
+	if !token.InScope(scopeList) {
+		t.Error("Valid scope not accepted")
+	}
 }
 
 func TestFindByValue(t *testing.T) {
-    var (
-        userId = "111"
-        tokenValue = "token-value-1"
-        anotherTokenValue = "token-value-2"
-        scopeList = []string{"scope1", "scope2"}
-        lifeTime = 100
-    )
+	var (
+		userId            = "111"
+		tokenValue        = "token-value-1"
+		anotherTokenValue = "token-value-2"
+		scopeList         = []string{"scope1", "scope2"}
+		lifeTime          = 100
+	)
 
-    p := CreateNewMemoryTokenProvider()
+	p := CreateNewMemoryTokenProvider()
 
-    token, err := p.AddToken(userId, tokenValue, scopeList, lifeTime)
+	token, err := p.AddToken(userId, tokenValue, scopeList, lifeTime)
 
-    if err != nil {
-        t.Error("Can not add new token")
-    }
+	if err != nil {
+		t.Error("Can not add new token")
+	}
 
-    storedToken, err := p.FindByValue(tokenValue)
+	storedToken, err := p.FindByValue(tokenValue)
 
-    if err != nil {
-        t.Error("Can not newly aded token")
-    }
+	if err != nil {
+		t.Error("Can not newly aded token")
+	}
 
-    if storedToken.GetTokenValue() != token.GetTokenValue() {
-        t.Error("Tokens are not equal")
-    }
+	if storedToken.GetTokenValue() != token.GetTokenValue() {
+		t.Error("Tokens are not equal")
+	}
 
-    anotherStoredToken, err := p.FindByValue(anotherTokenValue)
+	anotherStoredToken, err := p.FindByValue(anotherTokenValue)
 
-    if err == nil {
-        t.Error("Undefined token can not be found")
-    }
+	if err == nil {
+		t.Error("Undefined token can not be found")
+	}
 }
 
 func TestDropToken(t *testing.T) {
-    var (
-        userId = "111"
-        tokenValue = "token-value-1"
-        scopeList = []string{"scope1", "scope2"}
-        lifeTime = 100
-    )
+	var (
+		userId     = "111"
+		tokenValue = "token-value-1"
+		scopeList  = []string{"scope1", "scope2"}
+		lifeTime   = 100
+	)
 
-    p := CreateNewMemoryTokenProvider()
+	p := CreateNewMemoryTokenProvider()
 
-    token, err := p.AddToken(userId, tokenValue, scopeList, lifeTime)
+	token, err := p.AddToken(userId, tokenValue, scopeList, lifeTime)
 
-    if err != nil {
-        t.Error("Can not add new token")
-    }
+	if err != nil {
+		t.Error("Can not add new token")
+	}
 
-    err = p.DropToken(tokenValue)
+	err = p.DropToken(tokenValue)
 
-    if err != nil {
-        t.Error("Can not drop token")
-    }
+	if err != nil {
+		t.Error("Can not drop token")
+	}
 
-    _, err := p.FindByValue(tokenValue)
+	_, err := p.FindByValue(tokenValue)
 
-    if err == nil {
-        t.Error("Token have not deleted")
-    }
+	if err == nil {
+		t.Error("Token have not deleted")
+	}
 }
 
 func TestDropByUserId(t *testing.T) {
-    var (
-        userId = "111"
-        tokenValue = "token-value-1"
-        scopeList = []string{"scope1", "scope2"}
-        lifeTime = 100
-    )
+	var (
+		userId     = "111"
+		tokenValue = "token-value-1"
+		scopeList  = []string{"scope1", "scope2"}
+		lifeTime   = 100
+	)
 
-    p := CreateNewMemoryTokenProvider()
+	p := CreateNewMemoryTokenProvider()
 
-    token, err := p.AddToken(userId, tokenValue, scopeList, lifeTime)
+	token, err := p.AddToken(userId, tokenValue, scopeList, lifeTime)
 
-    if err != nil {
-        t.Error("Can not add new token")
-    }
+	if err != nil {
+		t.Error("Can not add new token")
+	}
 
-    p.DropTokenByUserId(userId)
+	p.DropTokenByUserId(userId)
 
-    _, err := p.FindByValue(tokenValue)
+	_, err := p.FindByValue(tokenValue)
 
-    if err == nil {
-        t.Error("Token have not deleted")
-    }
+	if err == nil {
+		t.Error("Token have not deleted")
+	}
 }
 
 func TestDropAll(t *testing.T) {
-    var (
-        userId = "111"
-        tokenValue = "token-value-1"
-        scopeList = []string{"scope1", "scope2"}
-        lifeTime = 100
-    )
+	var (
+		userId     = "111"
+		tokenValue = "token-value-1"
+		scopeList  = []string{"scope1", "scope2"}
+		lifeTime   = 100
+	)
 
-    p := CreateNewMemoryTokenProvider()
+	p := CreateNewMemoryTokenProvider()
 
-    token, err := p.AddToken(userId, tokenValue, scopeList, lifeTime)
+	token, err := p.AddToken(userId, tokenValue, scopeList, lifeTime)
 
-    if err != nil {
-        t.Error("Can not add new token")
-    }
+	if err != nil {
+		t.Error("Can not add new token")
+	}
 
-    p.DropAll()
+	p.DropAll()
 
-    _, err := p.FindByValue(tokenValue)
+	_, err := p.FindByValue(tokenValue)
 
-    if err == nil {
-        t.Error("Token have not deleted")
-    }
+	if err == nil {
+		t.Error("Token have not deleted")
+	}
 }
