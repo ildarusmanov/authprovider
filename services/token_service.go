@@ -11,6 +11,7 @@ type TokenProvider interface {
 type TokenData interface {
 	GetTokenUserId() string
 	GetTokenTimestamp() int64
+    GetTokenLifetime() int
 	GetTokenValue() string
 	GetTokenScope() []fstring
 	IsValid() bool

@@ -30,7 +30,7 @@ func TestCreateNewToken(t *testing.T) {
 		t.Error("Invalid user id")
 	}
 
-	if newToken.GetTokenScope() != scope {
+	if !newToken.InScope(scope) {
 		t.Error("Invalid token scope")
 	}
 
@@ -75,7 +75,6 @@ func TestIsValid(t *testing.T) {
 		tokenValue     = "token-value-1"
 		userId         = "111"
 		scope          = []string{"scope1", "scope2"}
-		anoherScope    = []string{"scope3", "scope4"}
 		tokenTimestamp = time.Now().Unix()
 		lifetime       = 5
 	)
@@ -92,7 +91,7 @@ func TestIsValid(t *testing.T) {
 		t.Error("Token expired too fast")
 	}
 
-	time.Sleep((lifetime + 1) * time.Second)
+	time.Sleep(time.Duration(lifetime + 1) * time.Second)
 
 	if newToken.IsValid() {
 		t.Error("Token must be expired")

@@ -14,15 +14,18 @@ type Token struct {
 }
 
 func CreateNewToken(tokenUserId, tokenValue string, tokenScope []string, tokenTimestamp int64, tokenLifetime int) *Token {
-	newToken = &Token{
+	newToken := &Token{
 		tokenUserId,
 		tokenValue,
 		tokenScope,
 		tokenTimestamp,
 		tokenLifetime,
+        nil,
 	}
 
 	newToken.initScope()
+
+    return newToken
 }
 
 func (t *Token) initScope() {
@@ -42,7 +45,11 @@ func (t *Token) GetTokenValue() string {
 }
 
 func (t *Token) GetTokenTimestamp() int64 {
-	return t.tokenTimestamp
+    return t.tokenTimestamp
+}
+
+func (t *Token) GetTokenLifetime() int {
+    return t.tokenLifetime
 }
 
 func (t *Token) GetTokenScope() []string {
@@ -53,7 +60,7 @@ func (t *Token) InScope(needle []string) bool {
 	allInScope := true
 
 	for _, s := range needle {
-		if _, ok := t.tokenScopeMap(s); !ok {
+		if _, ok := t.tokenScopeMap[s]; !ok {
 			allInScope = false
 		}
 	}
@@ -66,5 +73,5 @@ func (t *Token) IsValid() bool {
 		return true
 	}
 
-	return time.Now().Unix() < t.tokenTimestamp+t.tokenLifetime
+	return time.Now().Unix() < t.tokenTimestamp + int64(t.tokenLifetime)
 }
