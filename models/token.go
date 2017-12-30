@@ -13,12 +13,12 @@ type Token struct {
 	tokenScopeMap  map[string]struct{}
 }
 
-func CreateNewToken(tokenUserId, tokenValue string, tokenScope []string, tokenTimestamp int64, tokenLifetime int) *Token {
+func CreateNewToken(tokenUserId, tokenValue string, tokenScope []string, tokenLifetime int) *Token {
 	newToken := &Token{
 		tokenUserId,
 		tokenValue,
 		tokenScope,
-		tokenTimestamp,
+		time.Now().Unix(),
 		tokenLifetime,
         nil,
 	}

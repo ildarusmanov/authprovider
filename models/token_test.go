@@ -10,7 +10,6 @@ func TestCreateNewToken(t *testing.T) {
 		tokenValue     = "token-value-1"
 		userId         = "111"
 		scope          = []string{"scope1", "scope2"}
-		tokenTimestamp = time.Now().Unix()
 		lifetime       = 1000
 	)
 
@@ -18,7 +17,6 @@ func TestCreateNewToken(t *testing.T) {
 		userId,
 		tokenValue,
 		scope,
-		tokenTimestamp,
 		lifetime,
 	)
 
@@ -49,7 +47,6 @@ func TestInScope(t *testing.T) {
 		userId         = "111"
 		scope          = []string{"scope1", "scope2"}
 		anoherScope    = []string{"scope3", "scope4"}
-		tokenTimestamp = time.Now().Unix()
 		lifetime       = 1000
 	)
 
@@ -57,7 +54,6 @@ func TestInScope(t *testing.T) {
 		userId,
 		tokenValue,
 		scope,
-		tokenTimestamp,
 		lifetime,
 	)
 
@@ -75,7 +71,6 @@ func TestIsValid(t *testing.T) {
 		tokenValue     = "token-value-1"
 		userId         = "111"
 		scope          = []string{"scope1", "scope2"}
-		tokenTimestamp = time.Now().Unix()
 		lifetime       = 5
 	)
 
@@ -83,7 +78,6 @@ func TestIsValid(t *testing.T) {
 		userId,
 		tokenValue,
 		scope,
-		tokenTimestamp,
 		lifetime,
 	)
 

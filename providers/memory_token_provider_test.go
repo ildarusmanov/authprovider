@@ -1,6 +1,7 @@
-package services
+package providers
 
 import (
+	"github.com/ildarusmanov/authprovider/models"
 	"testing"
 )
 
@@ -19,11 +20,12 @@ func TestAddToken(t *testing.T) {
 		scopeList      = []string{"scope1", "scope2"}
 		otherScopeList = []string{"scope3", "scope4"}
 		lifeTime       = 100
+		newToken = models.CreateNewToken(userId, tokenValue, scopeList, lifeTime)
 	)
 
 	p := CreateNewMemoryTokenProvider()
 
-	token, err := p.AddToken(userId, tokenValue, scopeList, lifeTime)
+	token, err := p.AddToken(newToken)
 
 	if err != nil {
 		t.Error("Can not add token")
@@ -57,11 +59,12 @@ func TestFindByValue(t *testing.T) {
 		anotherTokenValue = "token-value-2"
 		scopeList         = []string{"scope1", "scope2"}
 		lifeTime          = 100
+		newToken = models.CreateNewToken(userId, tokenValue, scopeList, lifeTime)
 	)
 
 	p := CreateNewMemoryTokenProvider()
 
-	token, err := p.AddToken(userId, tokenValue, scopeList, lifeTime)
+	token, err := p.AddToken(newToken)
 
 	if err != nil {
 		t.Error("Can not add new token")
@@ -90,11 +93,12 @@ func TestDropToken(t *testing.T) {
 		tokenValue = "token-value-1"
 		scopeList  = []string{"scope1", "scope2"}
 		lifeTime   = 100
+		newToken = models.CreateNewToken(userId, tokenValue, scopeList, lifeTime)
 	)
 
 	p := CreateNewMemoryTokenProvider()
 
-	token, err := p.AddToken(userId, tokenValue, scopeList, lifeTime)
+	token, err := p.AddToken(newToken)
 
 	if err != nil {
 		t.Error("Can not add new token")
@@ -119,11 +123,12 @@ func TestDropByUserId(t *testing.T) {
 		tokenValue = "token-value-1"
 		scopeList  = []string{"scope1", "scope2"}
 		lifeTime   = 100
+		newToken = models.CreateNewToken(userId, tokenValue, scopeList, lifeTime)
 	)
 
 	p := CreateNewMemoryTokenProvider()
 
-	token, err := p.AddToken(userId, tokenValue, scopeList, lifeTime)
+	token, err := p.AddToken(newToken)
 
 	if err != nil {
 		t.Error("Can not add new token")
@@ -144,11 +149,12 @@ func TestDropAll(t *testing.T) {
 		tokenValue = "token-value-1"
 		scopeList  = []string{"scope1", "scope2"}
 		lifeTime   = 100
+		newToken = models.CreateNewToken(userId, tokenValue, scopeList, lifeTime)
 	)
 
 	p := CreateNewMemoryTokenProvider()
 
-	token, err := p.AddToken(userId, tokenValue, scopeList, lifeTime)
+	token, err := p.AddToken(newToken)
 
 	if err != nil {
 		t.Error("Can not add new token")

@@ -1,21 +1,15 @@
 package services
 
+import (
+    "github.com/ildarusmanov/authprovider/models"
+)
+
 type TokenProvider interface {
-	FindByValue(tokenValue string) (TokenData, error)
-	AddToken(userId string, tokenValue string, scope []string, lifetime int) (TokenData, error)
+	FindByValue(tokenValue string) (*models.Token, error)
+	AddToken(token *models.Token) (*models.Token, error)
 	DropToken(tokenValue string) error
 	DropByUserId(userId string)
 	DropAll()
-}
-
-type TokenData interface {
-	GetTokenUserId() string
-	GetTokenTimestamp() int64
-    GetTokenLifetime() int
-	GetTokenValue() string
-	GetTokenScope() []fstring
-	IsValid() bool
-	InScope([]string) bool
 }
 
 type TokenService struct {
@@ -26,7 +20,7 @@ func CreateNewTokenService(provider TokenProvider) *TokenService {
 	return &TokenService{provider}
 }
 
-func (s *TokenService) Generate(userId string, scope []string, lifeTime int) (TokenData, error) {
+func (s *TokenService) Generate(userId string, scope []string, lifeTime int) (*models.Token, error) {
 	return s.save(userId, "", scope, lifeTime)
 }
 
@@ -45,9 +39,9 @@ func (s *TokenService) Validate(userId string, tokenValue string) bool {
 }
 
 func (s *TokenService) save(userId, tokenValue string, scope []string, lifetime int) error {
-	return s.provider.AddToken(userId, tokenValue, scope, lifetime)
+	return s.provider.AddToken(models.CreateNewToken(userId, tokenValue, scope, lifetime)
 }
 
-func (s *TokenService) find(tokenValue string) (TokenData, error) {
+func (s *TokenService) find(tokenValue string) (*models.Token, error) {
 	return s.provider.FindByValue(tokenValue)
 }
