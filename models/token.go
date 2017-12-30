@@ -20,12 +20,12 @@ func CreateNewToken(tokenUserId, tokenValue string, tokenScope []string, tokenLi
 		tokenScope,
 		time.Now().Unix(),
 		tokenLifetime,
-        nil,
+		nil,
 	}
 
 	newToken.initScope()
 
-    return newToken
+	return newToken
 }
 
 func (t *Token) initScope() {
@@ -45,11 +45,11 @@ func (t *Token) GetTokenValue() string {
 }
 
 func (t *Token) GetTokenTimestamp() int64 {
-    return t.tokenTimestamp
+	return t.tokenTimestamp
 }
 
 func (t *Token) GetTokenLifetime() int {
-    return t.tokenLifetime
+	return t.tokenLifetime
 }
 
 func (t *Token) GetTokenScope() []string {
@@ -73,5 +73,5 @@ func (t *Token) IsValid() bool {
 		return true
 	}
 
-	return time.Now().Unix() < t.tokenTimestamp + int64(t.tokenLifetime)
+	return time.Now().Unix() < t.tokenTimestamp+int64(t.tokenLifetime)
 }

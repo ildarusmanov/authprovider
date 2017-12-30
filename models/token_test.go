@@ -7,10 +7,10 @@ import (
 
 func TestCreateNewToken(t *testing.T) {
 	var (
-		tokenValue     = "token-value-1"
-		userId         = "111"
-		scope          = []string{"scope1", "scope2"}
-		lifetime       = 1000
+		tokenValue = "token-value-1"
+		userId     = "111"
+		scope      = []string{"scope1", "scope2"}
+		lifetime   = 1000
 	)
 
 	newToken := CreateNewToken(
@@ -43,11 +43,11 @@ func TestCreateNewToken(t *testing.T) {
 
 func TestInScope(t *testing.T) {
 	var (
-		tokenValue     = "token-value-1"
-		userId         = "111"
-		scope          = []string{"scope1", "scope2"}
-		anoherScope    = []string{"scope3", "scope4"}
-		lifetime       = 1000
+		tokenValue  = "token-value-1"
+		userId      = "111"
+		scope       = []string{"scope1", "scope2"}
+		anoherScope = []string{"scope3", "scope4"}
+		lifetime    = 1000
 	)
 
 	newToken := CreateNewToken(
@@ -68,10 +68,10 @@ func TestInScope(t *testing.T) {
 
 func TestIsValid(t *testing.T) {
 	var (
-		tokenValue     = "token-value-1"
-		userId         = "111"
-		scope          = []string{"scope1", "scope2"}
-		lifetime       = 5
+		tokenValue = "token-value-1"
+		userId     = "111"
+		scope      = []string{"scope1", "scope2"}
+		lifetime   = 5
 	)
 
 	newToken := CreateNewToken(
@@ -85,7 +85,7 @@ func TestIsValid(t *testing.T) {
 		t.Error("Token expired too fast")
 	}
 
-	time.Sleep(time.Duration(lifetime + 1) * time.Second)
+	time.Sleep(time.Duration(lifetime+1) * time.Second)
 
 	if newToken.IsValid() {
 		t.Error("Token must be expired")

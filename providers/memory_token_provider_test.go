@@ -20,7 +20,7 @@ func TestAddToken(t *testing.T) {
 		scopeList      = []string{"scope1", "scope2"}
 		otherScopeList = []string{"scope3", "scope4"}
 		lifeTime       = 100
-		newToken = models.CreateNewToken(userId, tokenValue, scopeList, lifeTime)
+		newToken       = models.CreateNewToken(userId, tokenValue, scopeList, lifeTime)
 	)
 
 	p := CreateNewMemoryTokenProvider()
@@ -59,7 +59,7 @@ func TestFindByValue(t *testing.T) {
 		anotherTokenValue = "token-value-2"
 		scopeList         = []string{"scope1", "scope2"}
 		lifeTime          = 100
-		newToken = models.CreateNewToken(userId, tokenValue, scopeList, lifeTime)
+		newToken          = models.CreateNewToken(userId, tokenValue, scopeList, lifeTime)
 	)
 
 	p := CreateNewMemoryTokenProvider()
@@ -93,7 +93,7 @@ func TestDropToken(t *testing.T) {
 		tokenValue = "token-value-1"
 		scopeList  = []string{"scope1", "scope2"}
 		lifeTime   = 100
-		newToken = models.CreateNewToken(userId, tokenValue, scopeList, lifeTime)
+		newToken   = models.CreateNewToken(userId, tokenValue, scopeList, lifeTime)
 	)
 
 	p := CreateNewMemoryTokenProvider()
@@ -123,7 +123,7 @@ func TestDropByUserId(t *testing.T) {
 		tokenValue = "token-value-1"
 		scopeList  = []string{"scope1", "scope2"}
 		lifeTime   = 100
-		newToken = models.CreateNewToken(userId, tokenValue, scopeList, lifeTime)
+		newToken   = models.CreateNewToken(userId, tokenValue, scopeList, lifeTime)
 	)
 
 	p := CreateNewMemoryTokenProvider()
@@ -149,7 +149,7 @@ func TestDropAll(t *testing.T) {
 		tokenValue = "token-value-1"
 		scopeList  = []string{"scope1", "scope2"}
 		lifeTime   = 100
-		newToken = models.CreateNewToken(userId, tokenValue, scopeList, lifeTime)
+		newToken   = models.CreateNewToken(userId, tokenValue, scopeList, lifeTime)
 	)
 
 	p := CreateNewMemoryTokenProvider()
