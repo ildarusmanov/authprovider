@@ -13,6 +13,7 @@ type Token struct {
 	tokenScopeMap  map[string]struct{}
 }
 
+// Creates and returns new pointer to token
 func CreateNewToken(tokenUserId, tokenValue string, tokenScope []string, tokenLifetime int) *Token {
 	newToken := &Token{
 		tokenUserId,
@@ -28,6 +29,7 @@ func CreateNewToken(tokenUserId, tokenValue string, tokenScope []string, tokenLi
 	return newToken
 }
 
+// initialize token scope
 func (t *Token) initScope() {
 	t.tokenScopeMap = make(map[string]struct{}, len(t.tokenScope))
 
@@ -56,6 +58,7 @@ func (t *Token) GetTokenScope() []string {
 	return t.tokenScope
 }
 
+// check items in scope exists
 func (t *Token) InScope(needle []string) bool {
 	allInScope := true
 
@@ -68,6 +71,7 @@ func (t *Token) InScope(needle []string) bool {
 	return allInScope
 }
 
+// validate token
 func (t *Token) IsValid() bool {
 	if t.tokenLifetime == 0 {
 		return true
