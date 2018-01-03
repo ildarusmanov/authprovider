@@ -4,6 +4,7 @@ import (
     "github.com/ildarusmanov/authprovider/models"
 )
 
+// interface for token provider
 type TokenProvider interface {
 	FindByValue(tokenValue string) (*models.Token, error)
 	AddToken(token *models.Token) (*models.Token, error)
@@ -12,14 +13,17 @@ type TokenProvider interface {
 	DropAll()
 }
 
+// token service type
 type TokenService struct {
 	provider TokenProvider
 }
 
+// create new token service
 func CreateNewTokenService(provider TokenProvider) *TokenService {
 	return &TokenService{provider}
 }
 
+// generate new token value
 func (s *TokenService) Generate(userId string, scope []string, lifeTime int) (*models.Token, error) {
 	return s.save(userId, "", scope, lifeTime)
 }
