@@ -5,9 +5,13 @@ import (
 	"github.com/ildarusmanov/authprovider/models"
 )
 
+// throw the exception when token not found
 var tokenNotFound = errors.New("Token not found")
+
+// throw the exception when token duplication detected
 var tokenAlreadyExists = errors.New("Token already exists")
 
+// in memory token storege type
 type tokensList []string
 
 type MemoryTokenProvider struct {
@@ -70,6 +74,7 @@ func (p *MemoryTokenProvider) DropByUserId(userId string) {
 	}
 }
 
+// delete all tokens from storage
 func (p *MemoryTokenProvider) DropAll() {
 	p.init()
 }
