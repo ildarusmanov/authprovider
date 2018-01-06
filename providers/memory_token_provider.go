@@ -14,11 +14,13 @@ var tokenAlreadyExists = errors.New("Token already exists")
 // in memory token storege type
 type tokensList []string
 
+// in memory token provider type
 type MemoryTokenProvider struct {
 	tokens     map[string]*models.Token
 	userTokens map[string]tokensList
 }
 
+// token provider constructor
 func CreateNewMemoryTokenProvider() *MemoryTokenProvider {
 	p := &MemoryTokenProvider{}
 	p.init()
