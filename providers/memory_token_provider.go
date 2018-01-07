@@ -28,6 +28,7 @@ func CreateNewMemoryTokenProvider() *MemoryTokenProvider {
 	return p
 }
 
+// find a stored token by value
 func (p *MemoryTokenProvider) FindByValue(tokenValue string) (*models.Token, error) {
 	t, ok := p.tokens[tokenValue]
 
