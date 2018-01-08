@@ -1,7 +1,7 @@
 package services
 
 import (
-    "github.com/ildarusmanov/authprovider/models"
+	"github.com/ildarusmanov/authprovider/models"
 )
 
 // interface for token provider
@@ -44,15 +44,15 @@ func (s *TokenService) Validate(userId string, tokenValue string) bool {
 }
 
 func (s *TokenService) DropToken(tokenValue string) error {
-    return s.provider.DropToken(tokenValue)
+	return s.provider.DropToken(tokenValue)
 }
 
 func (s *TokenService) DropByUserId(userId string) {
-    s.provider.DropByUserId(userId)
+	s.provider.DropByUserId(userId)
 }
 
 func (s *TokenService) DropAll() {
-    s.provider.DropAll()
+	s.provider.DropAll()
 }
 
 // save new token
