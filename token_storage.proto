@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+service TokenStorage {
+    rpc AddToken(TokenRequest) returns (TokenResponse) {}
+    rpc FindToken(TokenRequest) returns (TokenResponse) {}
+    rpc DropToken(TokenRequest) return (TokenResponse) {}
+}
+
+message Token {
+    string value = 1;
+    string user_id = 2;
+    int32 lifetime = 3;
+    int64 timestamp = 4;
+    repeated string = 5;
+}
+
+message TokenRequest {
+    string signature = 1;
+    int64 timestamp = 2;
+    Token token = 3;
+}
+
+message TokensResponse {
+    bool is_ok = 1;
+    string status = 2;
+    Token token = 3;
+}
