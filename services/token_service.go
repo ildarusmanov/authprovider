@@ -44,7 +44,7 @@ func (s *TokenService) Validate(userId string, tokenValue string) bool {
 }
 
 // save new token
-func (s *TokenService) save(userId, tokenValue string, scope []string, lifetime int) error {
+func (s *TokenService) save(userId, tokenValue string, scope []string, lifetime int) (*models.Token, error) {
 	return s.provider.AddToken(models.CreateNewToken(userId, tokenValue, scope, lifetime))
 }
 
