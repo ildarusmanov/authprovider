@@ -20,7 +20,7 @@ message TokenRequest {
     Token token = 3;
 }
 
-message TokensResponse {
+message TokenResponse {
     bool is_ok = 1;
     string status = 2;
     Token token = 3;
