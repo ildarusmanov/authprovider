@@ -43,6 +43,18 @@ func (s *TokenService) Validate(userId string, tokenValue string) bool {
 	return token.IsValid()
 }
 
+func (s *TokenService) DropToken(tokenValue string) error {
+    return s.provider.DropToken(tokenValue)
+}
+
+func (s *TokenService) DropByUserId(userId string) {
+    s.provider.DropByUserId(userId)
+}
+
+func (s *TokenService) DropAll() {
+    s.provider.DropAll()
+}
+
 // save new token
 func (s *TokenService) save(userId, tokenValue string, scope []string, lifetime int) (*models.Token, error) {
 	return s.provider.AddToken(models.CreateNewToken(userId, tokenValue, scope, lifetime))

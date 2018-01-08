@@ -1,12 +1,13 @@
 package services
 
 import (
+    "github.com/ildarusmanov/authprovider/providers"
 	"testing"
 	"time"
 )
 
 func createTokenProvider() TokenProvider {
-	return
+	return providers.CreateNewMemoryTokenProvider()
 }
 
 func TestCreateNewTokenService(t *testing.T) {
@@ -64,6 +65,7 @@ func TestGenerateToken(t *testing.T) {
 func TestValidateToken(t *testing.T) {
 	var (
 		userId            = "111"
+        anotherUserId     = "222"
 		scopeList         = []string{"all"}
 		lifeTime          = 15
 		anotherTokenValue = "another-token-value"
@@ -74,15 +76,23 @@ func TestValidateToken(t *testing.T) {
 
 	token, err := s.Generate(userId, scopeList, lifeTime)
 
+    if userId == anotherUserId {
+        t.Error("Users must be different")
+    }
+
 	if err != nil {
 		t.Error("Can not generate token")
 	}
 
-	if !s.Validate(token.GetTokenValue()) {
+	if !s.Validate(userId, token.GetTokenValue()) {
 		t.Error("Generated token is invalid")
 	}
 
-	if s.Validate(anotherTokenValue) {
+	if s.Validate(userId, anotherTokenValue) {
 		t.Error("Non-existing token is valid")
 	}
+
+    if s.Validate(anotherUserId, token.GetTokenValue()) {
+        t.Error("Token can not be valid for other user")
+    }
 }
