@@ -1,4 +1,4 @@
-package main
+package grpcserver
 
 import (
     "testing"
@@ -11,4 +11,4 @@ func TestCreateNewServer(t *testing.T) {
     if s == nil {
         t.Error("Empty grpc server")
     }
-} 
+}
