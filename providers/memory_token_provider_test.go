@@ -2,15 +2,14 @@ package providers
 
 import (
 	"github.com/ildarusmanov/authprovider/models"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 func TestCreateNewMemoryTokenProvider(t *testing.T) {
 	p := CreateNewMemoryTokenProvider()
 
-	if p == nil {
-		t.Error("Provider have not created")
-	}
+	assert.NotNil(t, p)
 }
 
 func TestAddToken(t *testing.T) {
