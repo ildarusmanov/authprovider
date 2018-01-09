@@ -14,7 +14,9 @@ func CreateNewRequestValidator(token string) *RequestValidator {
 }
 
 func (rv *RequestValidator) Validate(signature string, timestamp int64) bool {
-    hash := helpers.GetMD5Hash(rv.token + ":" + strconv.FormatInt(timestamp, 10))
+    return rv.CreateSignature(timestamp) == signature
+}
 
-    return hash == signature
+func (rv *RequestValidator) CreateSignature(timestamp int64) string {
+    return helpers.GetMD5Hash(rv.token + ":" + strconv.FormatInt(timestamp, 10))
 }

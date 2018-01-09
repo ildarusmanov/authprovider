@@ -43,3 +43,15 @@ func TestValidate(t *testing.T) {
         t.Error("Signature must not be validated")
     }
 }
+
+func TestCreateSignature(t *testing.T) {
+    rv := CreateNewRequestValidator(requestValidatorToken)
+
+    if rv.CreateSignature(currentTime) != currentTimeSignature {
+        t.Error("Signatures must be equal")
+    }
+
+    if rv.CreateSignature(currentTime + 1) == currentTimeSignature {
+        t.Error("Signatures must not be equal")
+    }
+}
