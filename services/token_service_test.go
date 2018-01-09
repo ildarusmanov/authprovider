@@ -14,9 +14,7 @@ func createTokenProvider() TokenProvider {
 func TestCreateNewTokenService(t *testing.T) {
 	s := CreateNewTokenService(createTokenProvider())
 
-	if s == nil {
-		t.Error("Service does not created")
-	}
+	assert.NotNil(t, s)
 }
 
 func TestGenerateToken(t *testing.T) {
@@ -49,7 +47,7 @@ func TestGenerateToken(t *testing.T) {
 
 func TestValidateToken(t *testing.T) {
 	var (
-        assert           = assert.New(t)
+		assert            = assert.New(t)
 		userId            = "111"
 		anotherUserId     = "222"
 		scopeList         = []string{"all"}
@@ -62,9 +60,9 @@ func TestValidateToken(t *testing.T) {
 
 	token, err := s.Generate(userId, scopeList, lifeTime)
 
-    assert.Nil(err)
-    assert.NotEqual(userId, anotherUserId)
-    assert.True(s.Validate(userId, token.GetTokenValue()))
-    assert.False(s.Validate(userId, anotherTokenValue))
-    assert.False(s.Validate(anotherUserId, token.GetTokenValue()))
+	assert.Nil(err)
+	assert.NotEqual(userId, anotherUserId)
+	assert.True(s.Validate(userId, token.GetTokenValue()))
+	assert.False(s.Validate(userId, anotherTokenValue))
+	assert.False(s.Validate(anotherUserId, token.GetTokenValue()))
 }
