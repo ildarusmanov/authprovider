@@ -1,7 +1,7 @@
 package grpcserver
 
-type GrpcServer struct {}
+type GrpcServer struct{}
 
 func CreateNewGrpcServer() *GrpcServer {
-    return &GrpcServer{}
+	return &GrpcServer{}
 }

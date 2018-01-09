@@ -1,14 +1,13 @@
 package grpcserver
 
 import (
-    "testing"
-    // "google.golang.org/grpc/test/grpc_testing"
+	"github.com/stretchr/testify/assert"
+	"testing"
+	// "google.golang.org/grpc/test/grpc_testing"
 )
 
 func TestCreateNewServer(t *testing.T) {
-    s := CreateNewGrpcServer()
+	s := CreateNewGrpcServer()
 
-    if s == nil {
-        t.Error("Empty grpc server")
-    }
+	assert.NotNil(t, s)
 }
