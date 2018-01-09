@@ -49,6 +49,7 @@ func TestGenerateToken(t *testing.T) {
 
 func TestValidateToken(t *testing.T) {
 	var (
+        assert           = assert.New(t)
 		userId            = "111"
 		anotherUserId     = "222"
 		scopeList         = []string{"all"}
@@ -61,23 +62,9 @@ func TestValidateToken(t *testing.T) {
 
 	token, err := s.Generate(userId, scopeList, lifeTime)
 
-	if userId == anotherUserId {
-		t.Error("Users must be different")
-	}
-
-	if err != nil {
-		t.Error("Can not generate token")
-	}
-
-	if !s.Validate(userId, token.GetTokenValue()) {
-		t.Error("Generated token is invalid")
-	}
-
-	if s.Validate(userId, anotherTokenValue) {
-		t.Error("Non-existing token is valid")
-	}
-
-	if s.Validate(anotherUserId, token.GetTokenValue()) {
-		t.Error("Token can not be valid for other user")
-	}
+    assert.Nil(err)
+    assert.NotEqual(userId, anotherUserId)
+    assert.True(s.Validate(userId, token.GetTokenValue()))
+    assert.False(s.Validate(userId, anotherTokenValue))
+    assert.False(s.Validate(anotherUserId, token.GetTokenValue()))
 }
