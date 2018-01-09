@@ -4,6 +4,7 @@ import (
 	"github.com/ildarusmanov/authprovider/providers"
 	"testing"
 	"time"
+    "github.com/stretchr/testify/assert"
 )
 
 func createTokenProvider() TokenProvider {
@@ -20,6 +21,7 @@ func TestCreateNewTokenService(t *testing.T) {
 
 func TestGenerateToken(t *testing.T) {
 	var (
+        assert           = assert.New(t)
 		userId           = "111"
 		scopeList        = []string{"all"}
 		anotherScopeList = []string{"another-scope"}
@@ -31,35 +33,18 @@ func TestGenerateToken(t *testing.T) {
 
 	token, err := s.Generate(userId, scopeList, lifeTime)
 
-	if err != nil {
-		t.Error("Can not generate new token: %s", err)
-	}
+    assert.Nil(err)
 
-	if token == nil {
-		t.Error("Nil token generated")
-	}
+    if assert.NotNil(token) {
+        assert.True(token.InScope(scopeList))
+        assert.False(token.InScope(anotherScopeList))
+        assert.Equal(token.GetTokenUserId(), userId)
+        assert.True(token.IsValid())
 
-	if !token.InScope(scopeList) {
-		t.Error("Scope validation failed")
-	}
+        time.Sleep(time.Duration(lifeTime+1) * time.Second)
 
-	if token.InScope(anotherScopeList) {
-		t.Error("Scope validation failed")
-	}
-
-	if token.GetTokenUserId() != userId {
-		t.Error("Invalid user id")
-	}
-
-	if !token.IsValid() {
-		t.Error("Token has expired too fast")
-	}
-
-	time.Sleep(time.Duration(lifeTime+1) * time.Second)
-
-	if token.IsValid() {
-		t.Error("Token have to be already expired")
-	}
+        assert.False(token.IsValid())
+    }
 }
 
 func TestValidateToken(t *testing.T) {
