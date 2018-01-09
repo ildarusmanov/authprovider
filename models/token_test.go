@@ -1,12 +1,14 @@
 package models
 
 import (
+	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
 )
 
 func TestCreateNewToken(t *testing.T) {
 	var (
+		assert     = assert.New(t)
 		tokenValue = "token-value-1"
 		userId     = "111"
 		scope      = []string{"scope1", "scope2"}
@@ -20,29 +22,17 @@ func TestCreateNewToken(t *testing.T) {
 		lifetime,
 	)
 
-	if newToken.GetTokenValue() != tokenValue {
-		t.Error("Invalid token value")
-	}
-
-	if newToken.GetTokenUserId() != userId {
-		t.Error("Invalid user id")
-	}
-
-	if !newToken.InScope(scope) {
-		t.Error("Invalid token scope")
-	}
-
-	if newToken.GetTokenTimestamp() != tokenTimestamp {
-		t.Error("Invalid token timestamp")
-	}
-
-	if newToken.GetTokenLifetime() != lifetime {
-		t.Error("Invalid lifetime")
-	}
+	assert.NotNil(newToken)
+	assert.Equal(newToken.GetTokenValue(), tokenValue)
+	assert.Equal(newToken.GetTokenUserId(), userId)
+	assert.True(newToken.InScope(scope))
+	assert.True(newToken.GetTokenTimestamp() <= time.Now().Unix())
+	assert.Equal(newToken.GetTokenLifetime(), lifetime)
 }
 
 func TestInScope(t *testing.T) {
 	var (
+		assert      = assert.New(t)
 		tokenValue  = "token-value-1"
 		userId      = "111"
 		scope       = []string{"scope1", "scope2"}
@@ -57,17 +47,14 @@ func TestInScope(t *testing.T) {
 		lifetime,
 	)
 
-	if newToken.InScope(anoherScope) {
-		t.Error("Wrong scope accepted")
-	}
-
-	if !newToken.InScope(scope) {
-		t.Error("Valid scope rejected")
-	}
+	assert.NotNil(newToken)
+	assert.False(newToken.InScope(anoherScope))
+	assert.True(newToken.InScope(scope))
 }
 
 func TestIsValid(t *testing.T) {
 	var (
+		assert     = assert.New(t)
 		tokenValue = "token-value-1"
 		userId     = "111"
 		scope      = []string{"scope1", "scope2"}
@@ -81,13 +68,10 @@ func TestIsValid(t *testing.T) {
 		lifetime,
 	)
 
-	if !newToken.IsValid() {
-		t.Error("Token expired too fast")
-	}
+	assert.NotNil(newToken)
+	assert.True(newToken.IsValid())
 
 	time.Sleep(time.Duration(lifetime+1) * time.Second)
 
-	if newToken.IsValid() {
-		t.Error("Token must be expired")
-	}
+	assert.False(newToken.IsValid())
 }
