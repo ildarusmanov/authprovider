@@ -38,12 +38,7 @@ func TestValidate(t *testing.T) {
 
 func TestCreateSignature(t *testing.T) {
 	rv := CreateNewRequestValidator(requestValidatorToken)
-
-	if rv.CreateSignature(currentTime) != currentTimeSignature {
-		t.Error("Signatures must be equal")
-	}
-
-	if rv.CreateSignature(currentTime+1) == currentTimeSignature {
-		t.Error("Signatures must not be equal")
-	}
+	assert := assert.New(t)
+	assert.Equal(currentTimeSignature, rv.CreateSignature(currentTime))
+	assert.NotEqual(currentTimeSignature, rv.CreateSignature(currentTime+1))
 }
