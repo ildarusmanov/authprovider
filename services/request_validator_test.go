@@ -2,6 +2,7 @@ package services
 
 import (
 	"github.com/ildarusmanov/authprovider/helpers"
+	"github.com/stretchr/testify/assert"
 	"strconv"
 	"testing"
 	"time"
@@ -22,9 +23,7 @@ var (
 func TestCreateNewRequestValidator(t *testing.T) {
 	rv := CreateNewRequestValidator(requestValidatorToken)
 
-	if rv == nil {
-		t.Error("CreateNewRequestValidator() returns nil")
-	}
+	assert.NotNil(t, rv)
 }
 
 func TestValidate(t *testing.T) {
