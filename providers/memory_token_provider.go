@@ -12,12 +12,12 @@ var tokenNotFound = errors.New("Token not found")
 var tokenAlreadyExists = errors.New("Token already exists")
 
 // in memory token storege type
-type tokensList []string
+type TokensList []string
 
 // in memory token provider type
 type MemoryTokenProvider struct {
 	tokens     map[string]*models.Token
-	userTokens map[string]tokensList
+	userTokens map[string]TokensList
 }
 
 // token provider constructor
@@ -48,35 +48,39 @@ func (p *MemoryTokenProvider) AddToken(token *models.Token) (*models.Token, erro
 		return nil, err
 	}
 
-	p.tokens[token.GetTokenValue()] = token
+	p.tokens[t.GetTokenValue()] = t
 
-	p.assignTokenToUser(token)
+	p.assignTokenToUser(t.GetTokenUserId(), t.GetTokenValue())
 
-	return token
+	return token, nil
 }
 
 func (p *MemoryTokenProvider) DropToken(tokenValue string) error {
-	t, err := p.FindByValue(token.GetTokenValue())
+	t, err := p.FindByValue(tokenValue)
 
 	if err != nil {
 		return err
 	}
 
-	delete(p.tokens, tokenValue)
+	delete(p.tokens, t.GetTokenValue())
+
+	return nil
 }
 
-func (p *MemoryTokenProvider) DropByUserId(userId string) {
+func (p *MemoryTokenProvider) DropByUserId(userId string) error {
 	l, err := p.getTokensByUserId(userId)
 
 	if err != nil {
-		return
+		return err
 	}
 
-	for u, t := range l {
+	for _, t := range l {
 		if err = p.DropToken(t); err != nil {
 			return err
 		}
 	}
+
+	return nil
 }
 
 // delete all tokens from storage
@@ -84,27 +88,27 @@ func (p *MemoryTokenProvider) DropAll() {
 	p.init()
 }
 
-func (p *MemoryTokenProvider) getTokensByUserId(userId string) (tokensList, error) {
+func (p *MemoryTokenProvider) getTokensByUserId(userId string) (TokensList, error) {
 	l, ok := p.userTokens[userId]
 
 	if !ok {
-		return nil, error
+		return nil, tokenNotFound
 	}
 
 	return l, nil
 }
 
 func (p *MemoryTokenProvider) assignTokenToUser(userId, tokenValue string) {
-	l, err := p.getTokensByUserId(userId)
+	_, err := p.getTokensByUserId(userId)
 
 	if err != nil {
-		p.userTokens[userId] = make(map[string]string)
+		p.userTokens[userId] = TokensList{tokenValue}
+	} else {
+		p.userTokens[userId] = append(p.userTokens[userId], tokenValue)
 	}
-
-	p.userTokens[userId] = tokenValue
 }
 
 func (p *MemoryTokenProvider) init() {
 	p.tokens = make(map[string]*models.Token)
-	p.userTokens = make(map[string]string)
+	p.userTokens = make(map[string]TokensList)
 }

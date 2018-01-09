@@ -80,7 +80,7 @@ func TestFindByValue(t *testing.T) {
 		t.Error("Tokens are not equal")
 	}
 
-	anotherStoredToken, err := p.FindByValue(anotherTokenValue)
+	_, err = p.FindByValue(anotherTokenValue)
 
 	if err == nil {
 		t.Error("Undefined token can not be found")
@@ -104,13 +104,13 @@ func TestDropToken(t *testing.T) {
 		t.Error("Can not add new token")
 	}
 
-	err = p.DropToken(tokenValue)
+	err = p.DropToken(token.GetTokenValue())
 
 	if err != nil {
 		t.Error("Can not drop token")
 	}
 
-	_, err := p.FindByValue(tokenValue)
+	_, err = p.FindByValue(token.GetTokenValue())
 
 	if err == nil {
 		t.Error("Token have not deleted")
@@ -134,9 +134,9 @@ func TestDropByUserId(t *testing.T) {
 		t.Error("Can not add new token")
 	}
 
-	p.DropTokenByUserId(userId)
+	p.DropByUserId(token.GetTokenUserId())
 
-	_, err := p.FindByValue(tokenValue)
+	_, err = p.FindByValue(token.GetTokenValue())
 
 	if err == nil {
 		t.Error("Token have not deleted")
@@ -162,7 +162,7 @@ func TestDropAll(t *testing.T) {
 
 	p.DropAll()
 
-	_, err := p.FindByValue(tokenValue)
+	_, err = p.FindByValue(token.GetTokenValue())
 
 	if err == nil {
 		t.Error("Token have not deleted")

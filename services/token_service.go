@@ -9,7 +9,7 @@ type TokenProvider interface {
 	FindByValue(tokenValue string) (*models.Token, error)
 	AddToken(token *models.Token) (*models.Token, error)
 	DropToken(tokenValue string) error
-	DropByUserId(userId string)
+	DropByUserId(userId string) error
 	DropAll()
 }
 
@@ -47,7 +47,7 @@ func (s *TokenService) DropToken(tokenValue string) error {
 	return s.provider.DropToken(tokenValue)
 }
 
-func (s *TokenService) DropByUserId(userId string) {
+func (s *TokenService) DropByUserId(userId string) error {
 	s.provider.DropByUserId(userId)
 }
 
