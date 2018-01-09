@@ -55,7 +55,7 @@ func TestGenerateToken(t *testing.T) {
 		t.Error("Token has expired too fast")
 	}
 
-	time.Sleep((lifeTime + 1) * time.Second)
+	time.Sleep(time.Duration(lifeTime + 1) * time.Second)
 
 	if token.IsValid() {
 		t.Error("Token have to be already expired")

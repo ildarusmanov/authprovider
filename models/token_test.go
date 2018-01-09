@@ -85,7 +85,7 @@ func TestIsValid(t *testing.T) {
 		t.Error("Token expired too fast")
 	}
 
-	time.Sleep(time.Duration(lifetime+1) * time.Second)
+	time.Sleep(time.Duration(lifetime + 1) * time.Second)
 
 	if newToken.IsValid() {
 		t.Error("Token must be expired")

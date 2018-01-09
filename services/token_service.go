@@ -48,7 +48,7 @@ func (s *TokenService) DropToken(tokenValue string) error {
 }
 
 func (s *TokenService) DropByUserId(userId string) error {
-	s.provider.DropByUserId(userId)
+	return s.provider.DropByUserId(userId)
 }
 
 func (s *TokenService) DropAll() {
