@@ -71,6 +71,7 @@ func TestFindByValue(t *testing.T) {
 
 func TestDropToken(t *testing.T) {
 	var (
+		assert     = assert.New(t)
 		userId     = "111"
 		tokenValue = "token-value-1"
 		scopeList  = []string{"scope1", "scope2"}
@@ -82,21 +83,17 @@ func TestDropToken(t *testing.T) {
 
 	token, err := p.AddToken(newToken)
 
-	if err != nil {
-		t.Error("Can not add new token")
-	}
+	assert.Nil(err)
+	assert.NotNil(token)
 
 	err = p.DropToken(token.GetTokenValue())
 
-	if err != nil {
-		t.Error("Can not drop token")
-	}
+	assert.Nil(err)
 
-	_, err = p.FindByValue(token.GetTokenValue())
+	token, err = p.FindByValue(token.GetTokenValue())
 
-	if err == nil {
-		t.Error("Token have not deleted")
-	}
+	assert.NotNil(err)
+	assert.Nil(token)
 }
 
 func TestDropByUserId(t *testing.T) {
