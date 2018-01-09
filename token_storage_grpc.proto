@@ -1,9 +1,9 @@
 syntax = "proto3";
 
-service TokenStorage {
+service TokenStorageGrpc {
     rpc AddToken(TokenRequest) returns (TokenResponse) {}
     rpc FindToken(TokenRequest) returns (TokenResponse) {}
-    rpc DropToken(TokenRequest) return (TokenResponse) {}
+    rpc DropToken(TokenRequest) returns (TokenResponse) {}
 }
 
 message Token {
@@ -11,12 +11,12 @@ message Token {
     string user_id = 2;
     int32 lifetime = 3;
     int64 timestamp = 4;
-    repeated string = 5;
+    repeated string scope = 5;
 }
 
 message TokenRequest {
-    required string signature = 1;
-    required int64 timestamp = 2;
+    string signature = 1;
+    int64 timestamp = 2;
     Token token = 3;
 }
 
