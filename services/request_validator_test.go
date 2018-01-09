@@ -2,16 +2,17 @@ package services
 
 import (
 	"testing"
-    "crypto/md5"
     "time"
+    "github.com/ildarusmanov/authprovider/helpers"
 )
 
 const requestValidatorToken = "super-token"
 const anotherRequestValidatorToken = "another-super-token"
 var (
     currentTime = time.Now().Unix()
-    currentTimeSignature = md5.Sum([]byte(requestValidatorToken + ":" + string(currentTime)))
-    anotherTimeSignature = md5.Sum([]byte("signature-value"))
+    currentTimeSignatureData = requestValidatorToken + ":" + string(currentTime)
+    currentTimeSignature = helpers.GetMD5Hash(currentTimeSignatureData)
+    anotherTimeSignature = helpers.GetMD5Hash("signature-value")
 )
 
 func TestCreateNewRequestValidator(t *testing.T) {
