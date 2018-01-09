@@ -14,6 +14,7 @@ func TestCreateNewMemoryTokenProvider(t *testing.T) {
 
 func TestAddToken(t *testing.T) {
 	var (
+		assert         = assert.New(t)
 		userId         = "111"
 		tokenValue     = "token-value-1"
 		scopeList      = []string{"scope1", "scope2"}
@@ -26,28 +27,13 @@ func TestAddToken(t *testing.T) {
 
 	token, err := p.AddToken(newToken)
 
-	if err != nil {
-		t.Error("Can not add token")
-	}
+	assert.Nil(err)
 
-	if token == nil {
-		t.Error("Empty token")
-	}
-
-	if token.GetTokenUserId() != userId {
-		t.Error("Invalid token user id")
-	}
-
-	if token.GetTokenValue() != tokenValue {
-		t.Error("Invalid token value")
-	}
-
-	if token.InScope(otherScopeList) {
-		t.Error("Wrong scope. extra scope accepted")
-	}
-
-	if !token.InScope(scopeList) {
-		t.Error("Valid scope not accepted")
+	if assert.NotNil(token) {
+		assert.Equal(token.GetTokenUserId(), userId)
+		assert.Equal(token.GetTokenValue(), tokenValue)
+		assert.False(token.InScope(otherScopeList))
+		assert.True(token.InScope(scopeList))
 	}
 }
 
