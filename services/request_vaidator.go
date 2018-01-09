@@ -2,6 +2,7 @@ package services
 
 import (
     "github.com/ildarusmanov/authprovider/helpers"
+    "strconv"
 )
 
 type RequestValidator struct {
@@ -13,7 +14,7 @@ func CreateNewRequestValidator(token string) *RequestValidator {
 }
 
 func (rv *RequestValidator) Validate(signature string, timestamp int64) bool {
-    hash := helpers.GetMD5Hash(rv.token + ":" + string(timestamp))
+    hash := helpers.GetMD5Hash(rv.token + ":" + strconv.FormatInt(timestamp, 10))
 
     return hash == signature
 }

@@ -3,14 +3,18 @@ package services
 import (
 	"testing"
     "time"
+    "strconv"
     "github.com/ildarusmanov/authprovider/helpers"
 )
 
-const requestValidatorToken = "super-token"
-const anotherRequestValidatorToken = "another-super-token"
+const (
+    requestValidatorToken = "super-token"
+    anotherRequestValidatorToken = "another-super-token"
+)
+
 var (
     currentTime = time.Now().Unix()
-    currentTimeSignatureData = requestValidatorToken + ":" + string(currentTime)
+    currentTimeSignatureData = requestValidatorToken + ":" + strconv.FormatInt(currentTime, 10)
     currentTimeSignature = helpers.GetMD5Hash(currentTimeSignatureData)
     anotherTimeSignature = helpers.GetMD5Hash("signature-value")
 )
