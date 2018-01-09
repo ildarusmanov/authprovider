@@ -39,6 +39,7 @@ func TestAddToken(t *testing.T) {
 
 func TestFindByValue(t *testing.T) {
 	var (
+		assert            = assert.New(t)
 		userId            = "111"
 		tokenValue        = "token-value-1"
 		anotherTokenValue = "token-value-2"
@@ -51,25 +52,21 @@ func TestFindByValue(t *testing.T) {
 
 	token, err := p.AddToken(newToken)
 
-	if err != nil {
-		t.Error("Can not add new token")
-	}
+	assert.NotNil(token)
+	assert.Nil(err)
 
 	storedToken, err := p.FindByValue(tokenValue)
 
-	if err != nil {
-		t.Error("Can not find newly added token")
+	assert.Nil(err)
+
+	if assert.NotNil(storedToken) {
+		assert.Equal(storedToken.GetTokenValue(), token.GetTokenValue())
 	}
 
-	if storedToken.GetTokenValue() != token.GetTokenValue() {
-		t.Error("Tokens are not equal")
-	}
+	anotherToken, err := p.FindByValue(anotherTokenValue)
 
-	_, err = p.FindByValue(anotherTokenValue)
-
-	if err == nil {
-		t.Error("Undefined token can not be found")
-	}
+	assert.Nil(anotherToken)
+	assert.NotNil(err)
 }
 
 func TestDropToken(t *testing.T) {
