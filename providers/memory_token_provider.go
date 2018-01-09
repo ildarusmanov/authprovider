@@ -42,15 +42,13 @@ func (p *MemoryTokenProvider) FindByValue(tokenValue string) (*models.Token, err
 // save token in storage
 // return error if the value is alredy exists in storage
 func (p *MemoryTokenProvider) AddToken(token *models.Token) (*models.Token, error) {
-	t, err := p.FindByValue(token.GetTokenValue())
-
-	if err != nil {
-		return nil, err
+	if t, err := p.FindByValue(token.GetTokenValue()); err == nil {
+		return t, tokenAlreadyExists
 	}
 
-	p.tokens[t.GetTokenValue()] = t
+	p.tokens[token.GetTokenValue()] = token
 
-	p.assignTokenToUser(t.GetTokenUserId(), t.GetTokenValue())
+	p.assignTokenToUser(token.GetTokenUserId(), token.GetTokenValue())
 
 	return token, nil
 }

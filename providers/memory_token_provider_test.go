@@ -73,7 +73,7 @@ func TestFindByValue(t *testing.T) {
 	storedToken, err := p.FindByValue(tokenValue)
 
 	if err != nil {
-		t.Error("Can not newly aded token")
+		t.Error("Can not find newly added token")
 	}
 
 	if storedToken.GetTokenValue() != token.GetTokenValue() {
