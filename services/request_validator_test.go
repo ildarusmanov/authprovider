@@ -30,17 +30,10 @@ func TestValidate(t *testing.T) {
 	rvCurrent := CreateNewRequestValidator(requestValidatorToken)
 	rvAnother := CreateNewRequestValidator(anotherRequestValidatorToken)
 
-	if !rvCurrent.Validate(currentTimeSignature, currentTime) {
-		t.Error("Signature must be validated properly")
-	}
-
-	if rvCurrent.Validate(currentTimeSignature, currentTime+1) {
-		t.Error("Signature must not be validated properly")
-	}
-
-	if rvAnother.Validate(anotherTimeSignature, currentTime) {
-		t.Error("Signature must not be validated")
-	}
+	assert := assert.New(t)
+	assert.True(rvCurrent.Validate(currentTimeSignature, currentTime))
+	assert.False(rvCurrent.Validate(currentTimeSignature, currentTime+1))
+	assert.False(rvAnother.Validate(anotherTimeSignature, currentTime))
 }
 
 func TestCreateSignature(t *testing.T) {
