@@ -2,9 +2,9 @@ package services
 
 import (
 	"github.com/ildarusmanov/authprovider/providers"
+	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
-    "github.com/stretchr/testify/assert"
 )
 
 func createTokenProvider() TokenProvider {
@@ -21,7 +21,7 @@ func TestCreateNewTokenService(t *testing.T) {
 
 func TestGenerateToken(t *testing.T) {
 	var (
-        assert           = assert.New(t)
+		assert           = assert.New(t)
 		userId           = "111"
 		scopeList        = []string{"all"}
 		anotherScopeList = []string{"another-scope"}
@@ -33,18 +33,18 @@ func TestGenerateToken(t *testing.T) {
 
 	token, err := s.Generate(userId, scopeList, lifeTime)
 
-    assert.Nil(err)
+	assert.Nil(err)
 
-    if assert.NotNil(token) {
-        assert.True(token.InScope(scopeList))
-        assert.False(token.InScope(anotherScopeList))
-        assert.Equal(token.GetTokenUserId(), userId)
-        assert.True(token.IsValid())
+	if assert.NotNil(token) {
+		assert.True(token.InScope(scopeList))
+		assert.False(token.InScope(anotherScopeList))
+		assert.Equal(token.GetTokenUserId(), userId)
+		assert.True(token.IsValid())
 
-        time.Sleep(time.Duration(lifeTime+1) * time.Second)
+		time.Sleep(time.Duration(lifeTime+1) * time.Second)
 
-        assert.False(token.IsValid())
-    }
+		assert.False(token.IsValid())
+	}
 }
 
 func TestValidateToken(t *testing.T) {
