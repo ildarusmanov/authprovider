@@ -1,11 +1,13 @@
 package grpcserver
 
 import (
+    "github.com/ildarusmanov/authprovider/providers"
+    "github.com/ildarusmanov/authprovider/services"
     "golang.org/x/net/context"
     "errors"
 )
 
-var invalidReqSignature = errors.New("signatur not valid")
+var invalidReqSignature = errors.New("signature not valid")
 
 type requestValidator interface {
     Validate(signature string, timestamp int64) bool
@@ -33,10 +35,28 @@ func CreateTokenResponse(isOk bool, status string, token *Token)  *TokenResponse
 
 func (s *GrpcServer) AddToken(ctx context.Context, r *TokenRequest) (*TokenResponse, error) {
     if !s.rv.Validate(r.GetSignature(), r.GetTimestamp()) {
-        return nil, invalidReqSignature
+        return CreateTokenResponse(false, "fail", nil), invalidReqSignature
     }
 
-    return nil, nil
+    t, err := createNewTokenService().Generate(
+        r.GetToken().GetUserId(),
+        r.GetToken().GetScope(),
+        int(r.GetToken().GetLifetime()),
+    )
+
+    if err != nil {
+        return CreateTokenResponse(false, "fail", nil), err
+    }
+
+    token := CreateToken(
+        t.GetTokenValue(),
+        t.GetTokenUserId(),
+        int32(t.GetTokenLifetime()),
+        t.GetTokenTimestamp(),
+        t.GetTokenScope(),
+    )
+
+    return CreateTokenResponse(true, "ok", token), nil
 }
 
 func (s *GrpcServer) FindToken(ctx context.Context, r *TokenRequest) (*TokenResponse, error) {
@@ -61,4 +81,10 @@ func (s *GrpcServer) ValidateToken(ctx context.Context, r *TokenRequest) (*Token
     }
 
     return nil, nil
+}
+
+func createNewTokenService() *services.TokenService {
+    p := providers.CreateNewMemoryTokenProvider()
+
+    return services.CreateNewTokenService(p)
 }
