@@ -1,15 +1,15 @@
 package services
 
 import (
+	"errors"
 	"github.com/ildarusmanov/authprovider/models"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"errors"
 	"testing"
 )
 
 // mokecd token provider type
-type tokenProviderMock struct{
+type tokenProviderMock struct {
 	mock.Mock
 }
 
@@ -46,10 +46,10 @@ func TestCreateNewTokenService(t *testing.T) {
 
 func TestGenerateToken(t *testing.T) {
 	var (
-		userId           = "111"
-		tokenValue       = "token value 123"
-		scopeList        = []string{"all"}
-		lifeTime         = 5
+		userId     = "111"
+		tokenValue = "token value 123"
+		scopeList  = []string{"all"}
+		lifeTime   = 5
 	)
 
 	token := models.CreateNewToken(userId, tokenValue, scopeList, lifeTime)
@@ -57,7 +57,7 @@ func TestGenerateToken(t *testing.T) {
 	p := new(tokenProviderMock)
 
 	p.On("AddToken", userId, scopeList, lifeTime).Return(token, nil)
-	
+
 	gToken, err := CreateNewTokenService(p).Generate(userId, scopeList, lifeTime)
 
 	p.AssertCalled(t, "AddToken", userId, scopeList, lifeTime)
@@ -68,11 +68,11 @@ func TestGenerateToken(t *testing.T) {
 
 func TestValidateToken(t *testing.T) {
 	var (
-		userId           = "111"
-		tokenValue       = "token value 123"
+		userId            = "111"
+		tokenValue        = "token value 123"
 		anotherTokenValue = "another token value 123"
-		scopeList        = []string{"all"}
-		lifeTime         = 5
+		scopeList         = []string{"all"}
+		lifeTime          = 5
 	)
 
 	token := models.CreateNewToken(userId, tokenValue, scopeList, lifeTime)
@@ -130,6 +130,3 @@ func TestDropAll(t *testing.T) {
 
 	p.AssertCalled(t, "DropAll")
 }
-
-
-

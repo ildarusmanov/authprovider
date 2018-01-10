@@ -66,10 +66,10 @@ func TestFindByValue(t *testing.T) {
 
 func TestDropToken(t *testing.T) {
 	var (
-		assert     = assert.New(t)
-		userId     = "111"
-		scopeList  = []string{"scope1", "scope2"}
-		lifeTime   = 100
+		assert    = assert.New(t)
+		userId    = "111"
+		scopeList = []string{"scope1", "scope2"}
+		lifeTime  = 100
 	)
 
 	p := CreateNewMemoryTokenProvider()
@@ -91,10 +91,10 @@ func TestDropToken(t *testing.T) {
 
 func TestDropByUserId(t *testing.T) {
 	var (
-		assert     = assert.New(t)
-		userId     = "111"
-		scopeList  = []string{"scope1", "scope2"}
-		lifeTime   = 100
+		assert    = assert.New(t)
+		userId    = "111"
+		scopeList = []string{"scope1", "scope2"}
+		lifeTime  = 100
 	)
 
 	p := CreateNewMemoryTokenProvider()
@@ -114,10 +114,10 @@ func TestDropByUserId(t *testing.T) {
 
 func TestDropAll(t *testing.T) {
 	var (
-		assert     = assert.New(t)
-		userId     = "111"
-		scopeList  = []string{"scope1", "scope2"}
-		lifeTime   = 100
+		assert    = assert.New(t)
+		userId    = "111"
+		scopeList = []string{"scope1", "scope2"}
+		lifeTime  = 100
 	)
 
 	p := CreateNewMemoryTokenProvider()

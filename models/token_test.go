@@ -78,13 +78,13 @@ func TestIsValid(t *testing.T) {
 
 func TestSettersAndGetters(t *testing.T) {
 	var (
-		assert     = assert.New(t)
-		tokenValue = "token-value-1"
+		assert        = assert.New(t)
+		tokenValue    = "token-value-1"
 		newTokenValue = "newTokenValue"
-		userId     = "111"
-		scope      = []string{"scope1", "scope2"}
-		otherScope = []string{"scope3"}
-		lifetime   = 5
+		userId        = "111"
+		scope         = []string{"scope1", "scope2"}
+		otherScope    = []string{"scope3"}
+		lifetime      = 5
 	)
 
 	token := CreateNewToken(
