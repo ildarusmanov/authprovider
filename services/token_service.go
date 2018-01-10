@@ -7,7 +7,7 @@ import (
 // interface for token provider
 type TokenProvider interface {
 	FindByValue(tokenValue string) (*models.Token, error)
-	AddToken(token *models.Token) (*models.Token, error)
+	AddToken(userId string, scope []string, lifetime int) (*models.Token, error)
 	DropToken(tokenValue string) error
 	DropByUserId(userId string) error
 	DropAll()
@@ -25,7 +25,7 @@ func CreateNewTokenService(provider TokenProvider) *TokenService {
 
 // generate new token value
 func (s *TokenService) Generate(userId string, scope []string, lifeTime int) (*models.Token, error) {
-	return s.save(userId, "", scope, lifeTime)
+	return s.provider.AddToken(userId, scope, lifeTime)
 }
 
 // validate token value for given user
@@ -53,11 +53,6 @@ func (s *TokenService) DropByUserId(userId string) error {
 
 func (s *TokenService) DropAll() {
 	s.provider.DropAll()
-}
-
-// save new token
-func (s *TokenService) save(userId, tokenValue string, scope []string, lifetime int) (*models.Token, error) {
-	return s.provider.AddToken(models.CreateNewToken(userId, tokenValue, scope, lifetime))
 }
 
 // find token by value

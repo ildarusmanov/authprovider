@@ -1,7 +1,6 @@
 package providers
 
 import (
-	"github.com/ildarusmanov/authprovider/models"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -16,22 +15,20 @@ func TestAddToken(t *testing.T) {
 	var (
 		assert         = assert.New(t)
 		userId         = "111"
-		tokenValue     = "token-value-1"
 		scopeList      = []string{"scope1", "scope2"}
 		otherScopeList = []string{"scope3", "scope4"}
 		lifeTime       = 100
-		newToken       = models.CreateNewToken(userId, tokenValue, scopeList, lifeTime)
 	)
 
 	p := CreateNewMemoryTokenProvider()
 
-	token, err := p.AddToken(newToken)
+	token, err := p.AddToken(userId, scopeList, lifeTime)
 
 	assert.Nil(err)
 
 	if assert.NotNil(token) {
 		assert.Equal(token.GetTokenUserId(), userId)
-		assert.Equal(token.GetTokenValue(), tokenValue)
+		assert.NotEmpty(token.GetTokenValue())
 		assert.False(token.InScope(otherScopeList))
 		assert.True(token.InScope(scopeList))
 	}
@@ -39,23 +36,21 @@ func TestAddToken(t *testing.T) {
 
 func TestFindByValue(t *testing.T) {
 	var (
+		anotherTokenValue = "token value 123"
 		assert            = assert.New(t)
 		userId            = "111"
-		tokenValue        = "token-value-1"
-		anotherTokenValue = "token-value-2"
 		scopeList         = []string{"scope1", "scope2"}
 		lifeTime          = 100
-		newToken          = models.CreateNewToken(userId, tokenValue, scopeList, lifeTime)
 	)
 
 	p := CreateNewMemoryTokenProvider()
 
-	token, err := p.AddToken(newToken)
+	token, err := p.AddToken(userId, scopeList, lifeTime)
 
 	assert.NotNil(token)
 	assert.Nil(err)
 
-	storedToken, err := p.FindByValue(tokenValue)
+	storedToken, err := p.FindByValue(token.GetTokenValue())
 
 	assert.Nil(err)
 
@@ -73,15 +68,13 @@ func TestDropToken(t *testing.T) {
 	var (
 		assert     = assert.New(t)
 		userId     = "111"
-		tokenValue = "token-value-1"
 		scopeList  = []string{"scope1", "scope2"}
 		lifeTime   = 100
-		newToken   = models.CreateNewToken(userId, tokenValue, scopeList, lifeTime)
 	)
 
 	p := CreateNewMemoryTokenProvider()
 
-	token, err := p.AddToken(newToken)
+	token, err := p.AddToken(userId, scopeList, lifeTime)
 
 	assert.Nil(err)
 	assert.NotNil(token)
@@ -100,15 +93,13 @@ func TestDropByUserId(t *testing.T) {
 	var (
 		assert     = assert.New(t)
 		userId     = "111"
-		tokenValue = "token-value-1"
 		scopeList  = []string{"scope1", "scope2"}
 		lifeTime   = 100
-		newToken   = models.CreateNewToken(userId, tokenValue, scopeList, lifeTime)
 	)
 
 	p := CreateNewMemoryTokenProvider()
 
-	token, err := p.AddToken(newToken)
+	token, err := p.AddToken(userId, scopeList, lifeTime)
 
 	assert.NotNil(token)
 	assert.Nil(err)
@@ -125,15 +116,13 @@ func TestDropAll(t *testing.T) {
 	var (
 		assert     = assert.New(t)
 		userId     = "111"
-		tokenValue = "token-value-1"
 		scopeList  = []string{"scope1", "scope2"}
 		lifeTime   = 100
-		newToken   = models.CreateNewToken(userId, tokenValue, scopeList, lifeTime)
 	)
 
 	p := CreateNewMemoryTokenProvider()
 
-	token, err := p.AddToken(newToken)
+	token, err := p.AddToken(userId, scopeList, lifeTime)
 
 	assert.NotNil(token)
 	assert.Nil(err)

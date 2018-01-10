@@ -46,6 +46,10 @@ func (t *Token) GetTokenValue() string {
 	return t.tokenValue
 }
 
+func (t *Token) SetTokenValue(tokenValue string) {
+	t.tokenValue = tokenValue
+}
+
 func (t *Token) GetTokenTimestamp() int64 {
 	return t.tokenTimestamp
 }

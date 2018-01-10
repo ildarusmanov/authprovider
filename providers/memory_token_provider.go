@@ -3,6 +3,7 @@ package providers
 import (
 	"errors"
 	"github.com/ildarusmanov/authprovider/models"
+	"github.com/satori/go.uuid"
 )
 
 // throw the exception when token not found
@@ -41,7 +42,14 @@ func (p *MemoryTokenProvider) FindByValue(tokenValue string) (*models.Token, err
 
 // save token in storage
 // return error if the value is alredy exists in storage
-func (p *MemoryTokenProvider) AddToken(token *models.Token) (*models.Token, error) {
+func (p *MemoryTokenProvider) AddToken(userId string, scope []string, lifetime int) (*models.Token, error) {
+	token := models.CreateNewToken(
+		userId,
+		p.generateUniqueTokenValue(),
+		scope,
+		lifetime,
+	)
+
 	if t, err := p.FindByValue(token.GetTokenValue()); err == nil {
 		return t, tokenAlreadyExists
 	}
@@ -109,4 +117,14 @@ func (p *MemoryTokenProvider) assignTokenToUser(userId, tokenValue string) {
 func (p *MemoryTokenProvider) init() {
 	p.tokens = make(map[string]*models.Token)
 	p.userTokens = make(map[string]TokensList)
+}
+
+func (p *MemoryTokenProvider) generateUniqueTokenValue() string {
+	uniqId, err := uuid.NewV4()
+
+	if err != nil {
+		return ""
+	}
+
+	return uniqId.String()
 }

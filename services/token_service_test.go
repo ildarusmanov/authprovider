@@ -1,68 +1,103 @@
 package services
 
 import (
-	"github.com/ildarusmanov/authprovider/providers"
+	"github.com/ildarusmanov/authprovider/models"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+	"errors"
 	"testing"
-	"time"
 )
 
-func createTokenProvider() TokenProvider {
-	return providers.CreateNewMemoryTokenProvider()
+// mokecd token provider type
+type tokenProviderMock struct{
+	mock.Mock
+}
+
+func (m *tokenProviderMock) FindByValue(tokenValue string) (*models.Token, error) {
+	args := m.Called(tokenValue)
+	return args.Get(0).(*models.Token), args.Error(1)
+}
+
+func (m *tokenProviderMock) AddToken(userId string, scope []string, lifetime int) (*models.Token, error) {
+	args := m.Called(userId, scope, lifetime)
+	return args.Get(0).(*models.Token), args.Error(1)
+}
+
+func (m *tokenProviderMock) DropToken(tokenValue string) error {
+	args := m.Called(tokenValue)
+	return args.Error(1)
+}
+
+func (m *tokenProviderMock) DropByUserId(userId string) error {
+	args := m.Called(userId)
+	return args.Error(1)
+}
+
+func (m *tokenProviderMock) DropAll() {
+	_ = m.Called()
 }
 
 func TestCreateNewTokenService(t *testing.T) {
-	s := CreateNewTokenService(createTokenProvider())
+	p := new(tokenProviderMock)
+	s := CreateNewTokenService(p)
 
 	assert.NotNil(t, s)
 }
 
 func TestGenerateToken(t *testing.T) {
 	var (
-		assert           = assert.New(t)
 		userId           = "111"
+		tokenValue       = "token value 123"
 		scopeList        = []string{"all"}
-		anotherScopeList = []string{"another-scope"}
 		lifeTime         = 5
 	)
 
-	s := CreateNewTokenService(createTokenProvider())
-	s.DropAll()
+	token := models.CreateNewToken(userId, tokenValue, scopeList, lifeTime)
 
-	token, err := s.Generate(userId, scopeList, lifeTime)
+	p := new(tokenProviderMock)
 
-	assert.Nil(err)
+	p.On("AddToken", userId, scopeList, lifeTime).Return(token, nil)
+	
+	gToken, err := CreateNewTokenService(p).Generate(userId, scopeList, lifeTime)
 
-	if assert.NotNil(token) {
-		assert.True(token.InScope(scopeList))
-		assert.False(token.InScope(anotherScopeList))
-		assert.Equal(token.GetTokenUserId(), userId)
-		assert.True(token.IsValid())
+	p.AssertCalled(t, "AddToken", userId, scopeList, lifeTime)
 
-		time.Sleep(time.Duration(lifeTime+1) * time.Second)
-
-		assert.False(token.IsValid())
-	}
+	assert.Nil(t, err)
+	assert.Equal(t, gToken, token)
 }
 
 func TestValidateToken(t *testing.T) {
 	var (
-		assert            = assert.New(t)
-		userId            = "111"
-		anotherUserId     = "222"
-		scopeList         = []string{"all"}
-		lifeTime          = 15
-		anotherTokenValue = "another-token-value"
+		userId           = "111"
+		tokenValue       = "token value 123"
+		anotherTokenValue = "another token value 123"
+		scopeList        = []string{"all"}
+		lifeTime         = 5
 	)
 
-	s := CreateNewTokenService(createTokenProvider())
-	s.DropAll()
+	token := models.CreateNewToken(userId, tokenValue, scopeList, lifeTime)
 
-	token, err := s.Generate(userId, scopeList, lifeTime)
+	p := new(tokenProviderMock)
 
-	assert.Nil(err)
-	assert.NotEqual(userId, anotherUserId)
-	assert.True(s.Validate(userId, token.GetTokenValue()))
-	assert.False(s.Validate(userId, anotherTokenValue))
-	assert.False(s.Validate(anotherUserId, token.GetTokenValue()))
+	p.On("FindByValue", tokenValue).Return(token, nil)
+	p.On("FindByValue", anotherTokenValue).Return(token, errors.New("error"))
+
+	isValid := CreateNewTokenService(p).Validate(userId, tokenValue)
+
+	assert.True(t, isValid)
+
+	isValid = CreateNewTokenService(p).Validate(userId, anotherTokenValue)
+
+	assert.False(t, isValid)
 }
+
+func TestDropAllToken(t *testing.T) {
+	p := new(tokenProviderMock)
+
+	p.On("DropAll").Return()
+
+	CreateNewTokenService(p).DropAll()
+
+	p.AssertCalled(t, "DropAll")
+}
+
