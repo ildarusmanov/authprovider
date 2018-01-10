@@ -75,3 +75,32 @@ func TestIsValid(t *testing.T) {
 
 	assert.False(newToken.IsValid())
 }
+
+func TestSettersAndGetters(t *testing.T) {
+	var (
+		assert     = assert.New(t)
+		tokenValue = "token-value-1"
+		newTokenValue = "newTokenValue"
+		userId     = "111"
+		scope      = []string{"scope1", "scope2"}
+		otherScope = []string{"scope3"}
+		lifetime   = 5
+	)
+
+	token := CreateNewToken(
+		userId,
+		tokenValue,
+		scope,
+		lifetime,
+	)
+
+	assert.Equal(token.GetTokenValue(), tokenValue)
+	assert.Equal(token.GetTokenUserId(), userId)
+	assert.True(token.InScope(scope))
+	assert.False(token.InScope(otherScope))
+	assert.Equal(token.GetTokenLifetime(), lifetime)
+
+	token.SetTokenValue(newTokenValue)
+
+	assert.Equal(token.GetTokenValue(), newTokenValue)
+}
