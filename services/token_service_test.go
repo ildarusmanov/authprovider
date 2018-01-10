@@ -25,12 +25,12 @@ func (m *tokenProviderMock) AddToken(userId string, scope []string, lifetime int
 
 func (m *tokenProviderMock) DropToken(tokenValue string) error {
 	args := m.Called(tokenValue)
-	return args.Error(1)
+	return args.Error(0)
 }
 
 func (m *tokenProviderMock) DropByUserId(userId string) error {
 	args := m.Called(userId)
-	return args.Error(1)
+	return args.Error(0)
 }
 
 func (m *tokenProviderMock) DropAll() {
@@ -91,7 +91,37 @@ func TestValidateToken(t *testing.T) {
 	assert.False(t, isValid)
 }
 
-func TestDropAllToken(t *testing.T) {
+func TestDropToken(t *testing.T) {
+	var (
+		tokenValue = "token value"
+	)
+	p := new(tokenProviderMock)
+
+	p.On("DropToken", tokenValue).Return(nil)
+
+	err := CreateNewTokenService(p).DropToken(tokenValue)
+
+	p.AssertCalled(t, "DropToken", tokenValue)
+
+	assert.Nil(t, err)
+}
+
+func TestDropByUserId(t *testing.T) {
+	var (
+		userId = "user id 123"
+	)
+	p := new(tokenProviderMock)
+
+	p.On("DropByUserId", userId).Return(nil)
+
+	err := CreateNewTokenService(p).DropByUserId(userId)
+
+	p.AssertCalled(t, "DropByUserId", userId)
+
+	assert.Nil(t, err)
+}
+
+func TestDropAll(t *testing.T) {
 	p := new(tokenProviderMock)
 
 	p.On("DropAll").Return()
@@ -100,4 +130,6 @@ func TestDropAllToken(t *testing.T) {
 
 	p.AssertCalled(t, "DropAll")
 }
+
+
 
