@@ -1,7 +1,6 @@
 package grpcserver
 
 import (
-    "github.com/ildarusmanov/authprovider/providers"
     "github.com/ildarusmanov/authprovider/services"
     "golang.org/x/net/context"
     "errors"
@@ -15,10 +14,11 @@ type requestValidator interface {
 
 type GrpcServer struct{
     rv requestValidator
+    ts *services.TokenService
 }
 
-func CreateNewGrpcServer(rv requestValidator) *GrpcServer {
-	return &GrpcServer{rv}
+func CreateNewGrpcServer(rv requestValidator, p services.TokenProvider) *GrpcServer {
+	return &GrpcServer{rv, services.CreateNewTokenService(p)}
 }
 
 func CreateToken(value, userId string, lifetime int32, timestamp int64, scope []string) *Token {
@@ -38,7 +38,7 @@ func (s *GrpcServer) AddToken(ctx context.Context, r *TokenRequest) (*TokenRespo
         return CreateTokenResponse(false, "fail", nil), invalidReqSignature
     }
 
-    t, err := createNewTokenService().Generate(
+    t, err := s.ts.Generate(
         r.GetToken().GetUserId(),
         r.GetToken().GetScope(),
         int(r.GetToken().GetLifetime()),
@@ -61,15 +61,15 @@ func (s *GrpcServer) AddToken(ctx context.Context, r *TokenRequest) (*TokenRespo
 
 func (s *GrpcServer) FindToken(ctx context.Context, r *TokenRequest) (*TokenResponse, error) {
     if !s.rv.Validate(r.GetSignature(), r.GetTimestamp()) {
-        return nil, invalidReqSignature
+        return CreateTokenResponse(false, "fail", nil), invalidReqSignature
     }
 
-    return nil, nil
+    return CreateTokenResponse(true, "ok", nil), nil
 }
 
 func (s *GrpcServer) DropToken(ctx context.Context, r *TokenRequest) (*TokenResponse, error) {
     if !s.rv.Validate(r.GetSignature(), r.GetTimestamp()) {
-        return nil, invalidReqSignature
+        return CreateTokenResponse(false, "fail", nil), invalidReqSignature
     }
 
     return nil, nil
@@ -77,14 +77,8 @@ func (s *GrpcServer) DropToken(ctx context.Context, r *TokenRequest) (*TokenResp
 
 func (s *GrpcServer) ValidateToken(ctx context.Context, r *TokenRequest) (*TokenResponse, error) {
     if !s.rv.Validate(r.GetSignature(), r.GetTimestamp()) {
-        return nil, invalidReqSignature
+        return CreateTokenResponse(false, "fail", nil), invalidReqSignature
     }
 
     return nil, nil
-}
-
-func createNewTokenService() *services.TokenService {
-    p := providers.CreateNewMemoryTokenProvider()
-
-    return services.CreateNewTokenService(p)
 }
