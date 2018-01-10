@@ -95,6 +95,7 @@ func TestDropToken(t *testing.T) {
 	var (
 		tokenValue = "token value"
 	)
+
 	p := new(tokenProviderMock)
 
 	p.On("DropToken", tokenValue).Return(nil)
@@ -110,6 +111,7 @@ func TestDropByUserId(t *testing.T) {
 	var (
 		userId = "user id 123"
 	)
+
 	p := new(tokenProviderMock)
 
 	p.On("DropByUserId", userId).Return(nil)

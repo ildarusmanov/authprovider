@@ -10,4 +10,5 @@ func TestCreateNewServer(t *testing.T) {
 	s := CreateNewGrpcServer()
 
 	assert.NotNil(t, s)
+    assert.Implements(t, (*TokenStorageServer)(nil), s)
 }
