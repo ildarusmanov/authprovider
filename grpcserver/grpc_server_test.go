@@ -1,52 +1,52 @@
 package grpcserver
 
 import (
-    "github.com/ildarusmanov/authprovider/services"
-    "github.com/ildarusmanov/authprovider/providers"
+	"github.com/ildarusmanov/authprovider/providers"
+	"github.com/ildarusmanov/authprovider/services"
 	"github.com/stretchr/testify/assert"
-    "golang.org/x/net/context"
+	"golang.org/x/net/context"
 	"testing"
-    "time"
+	"time"
 	// "google.golang.org/grpc/test/grpc_testing"
 )
 
 const rvToken = "request validator token"
 
 func TestCreateNewServer(t *testing.T) {
-    rv := services.CreateNewRequestValidator(rvToken)
-    p := providers.CreateNewMemoryTokenProvider()
+	rv := services.CreateNewRequestValidator(rvToken)
+	p := providers.CreateNewMemoryTokenProvider()
 	s := CreateNewGrpcServer(rv, p)
 
 	assert.NotNil(t, s)
-    assert.Implements(t, (*TokenStorageServer)(nil), s)
+	assert.Implements(t, (*TokenStorageServer)(nil), s)
 }
 
 func TestAddToken(t *testing.T) {
-    assert := assert.New(t)
+	assert := assert.New(t)
 
-    token := CreateToken(
-        "",
-        "123",
-        100,
-        time.Now().Unix(),
-        []string{"all"},
-    )
+	token := CreateToken(
+		"",
+		"123",
+		100,
+		time.Now().Unix(),
+		[]string{"all"},
+	)
 
-    rv := services.CreateNewRequestValidator(rvToken)
-    p := providers.CreateNewMemoryTokenProvider()
-    s := CreateNewGrpcServer(rv, p)
-    timestamp := time.Now().Unix()
-    signature := rv.CreateSignature(timestamp)
+	rv := services.CreateNewRequestValidator(rvToken)
+	p := providers.CreateNewMemoryTokenProvider()
+	s := CreateNewGrpcServer(rv, p)
+	timestamp := time.Now().Unix()
+	signature := rv.CreateSignature(timestamp)
 
-    validReq := CreateTokenRequest(signature, timestamp, token)
-    invalidReq := CreateTokenRequest("some-sig", timestamp, nil)
+	validReq := CreateTokenRequest(signature, timestamp, token)
+	invalidReq := CreateTokenRequest("some-sig", timestamp, nil)
 
-    invalidResp, err := s.AddToken(context.Background(), invalidReq)
-    assert.NotNil(err)
-    assert.False(invalidResp.GetIsOk())
+	invalidResp, err := s.AddToken(context.Background(), invalidReq)
+	assert.NotNil(err)
+	assert.False(invalidResp.GetIsOk())
 
-    validResp, err := s.AddToken(context.Background(), validReq)
-    assert.Nil(err)
-    assert.True(validResp.GetIsOk())
-    assert.Equal(token.GetUserId(), validResp.GetToken().GetUserId())
+	validResp, err := s.AddToken(context.Background(), validReq)
+	assert.Nil(err)
+	assert.True(validResp.GetIsOk())
+	assert.Equal(token.GetUserId(), validResp.GetToken().GetUserId())
 }
