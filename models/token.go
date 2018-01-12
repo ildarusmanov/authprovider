@@ -38,14 +38,17 @@ func (t *Token) initScope() {
 	}
 }
 
+// get token user id 
 func (t *Token) GetTokenUserId() string {
 	return t.tokenUserId
 }
 
+// get token value
 func (t *Token) GetTokenValue() string {
 	return t.tokenValue
 }
 
+// set token value
 func (t *Token) SetTokenValue(tokenValue string) {
 	t.tokenValue = tokenValue
 }
