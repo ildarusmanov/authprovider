@@ -53,6 +53,7 @@ func (t *Token) SetTokenValue(tokenValue string) {
 	t.tokenValue = tokenValue
 }
 
+// get token created time
 func (t *Token) GetTokenTimestamp() int64 {
 	return t.tokenTimestamp
 }
