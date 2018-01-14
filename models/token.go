@@ -58,6 +58,7 @@ func (t *Token) GetTokenTimestamp() int64 {
 	return t.tokenTimestamp
 }
 
+// get token lifetime from in seconds
 func (t *Token) GetTokenLifetime() int {
 	return t.tokenLifetime
 }
