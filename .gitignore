@@ -1,2 +1,4 @@
 # ignore binary
 authprovider
+# ignore vendor
+vendor
