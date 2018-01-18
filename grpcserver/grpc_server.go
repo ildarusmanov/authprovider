@@ -66,14 +66,6 @@ func (s *GrpcServer) AddToken(ctx context.Context, r *TokenRequest) (*TokenRespo
 	return CreateTokenResponse(true, statusOk, token), nil
 }
 
-func (s *GrpcServer) FindToken(ctx context.Context, r *TokenRequest) (*TokenResponse, error) {
-	if !s.rv.Validate(r.GetSignature(), r.GetTimestamp()) {
-		return CreateTokenResponse(false, statusError, nil), invalidReqSignature
-	}
-
-	return CreateTokenResponse(true, statusOk, nil), nil
-}
-
 func (s *GrpcServer) DropToken(ctx context.Context, r *TokenRequest) (*TokenResponse, error) {
 	if !s.rv.Validate(r.GetSignature(), r.GetTimestamp()) {
 		return CreateTokenResponse(false, statusError, nil), invalidReqSignature
