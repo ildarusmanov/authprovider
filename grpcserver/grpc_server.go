@@ -6,9 +6,12 @@ import (
 	"golang.org/x/net/context"
 )
 
-var invalidReqSignature = errors.New("signature not valid")
-var invalidToken = errors.New("invalid token")
-
+var (
+    invalidReqSignature = errors.New("signature not valid")
+    invalidToken = errors.New("invalid token")
+    statusOk = "ok"
+    statusError = "error"
+)
 // request validator
 type requestValidator interface {
 	Validate(signature string, timestamp int64) bool
@@ -38,7 +41,7 @@ func CreateTokenResponse(isOk bool, status string, token *Token) *TokenResponse 
 
 func (s *GrpcServer) AddToken(ctx context.Context, r *TokenRequest) (*TokenResponse, error) {
 	if !s.rv.Validate(r.GetSignature(), r.GetTimestamp()) {
-		return CreateTokenResponse(false, "fail", nil), invalidReqSignature
+		return CreateTokenResponse(false, statusError, nil), invalidReqSignature
 	}
 
 	t, err := s.ts.Generate(
@@ -48,7 +51,7 @@ func (s *GrpcServer) AddToken(ctx context.Context, r *TokenRequest) (*TokenRespo
 	)
 
 	if err != nil {
-		return CreateTokenResponse(false, "fail", nil), err
+		return CreateTokenResponse(false, statusError, nil), err
 	}
 
 	token := CreateToken(
@@ -59,20 +62,20 @@ func (s *GrpcServer) AddToken(ctx context.Context, r *TokenRequest) (*TokenRespo
 		t.GetTokenScope(),
 	)
 
-	return CreateTokenResponse(true, "ok", token), nil
+	return CreateTokenResponse(true, statusOk, token), nil
 }
 
 func (s *GrpcServer) FindToken(ctx context.Context, r *TokenRequest) (*TokenResponse, error) {
 	if !s.rv.Validate(r.GetSignature(), r.GetTimestamp()) {
-		return CreateTokenResponse(false, "fail", nil), invalidReqSignature
+		return CreateTokenResponse(false, statusError, nil), invalidReqSignature
 	}
 
-	return CreateTokenResponse(true, "ok", nil), nil
+	return CreateTokenResponse(true, statusOk, nil), nil
 }
 
 func (s *GrpcServer) DropToken(ctx context.Context, r *TokenRequest) (*TokenResponse, error) {
 	if !s.rv.Validate(r.GetSignature(), r.GetTimestamp()) {
-		return CreateTokenResponse(false, "fail", nil), invalidReqSignature
+		return CreateTokenResponse(false, statusError, nil), invalidReqSignature
 	}
 
 	return nil, nil
@@ -80,7 +83,7 @@ func (s *GrpcServer) DropToken(ctx context.Context, r *TokenRequest) (*TokenResp
 
 func (s *GrpcServer) ValidateToken(ctx context.Context, r *TokenRequest) (*TokenResponse, error) {
 	if !s.rv.Validate(r.GetSignature(), r.GetTimestamp()) {
-		return CreateTokenResponse(false, "fail", nil), invalidReqSignature
+		return CreateTokenResponse(false, statusError, nil), invalidReqSignature
 	}
 
 	isValid := s.ts.Validate(
@@ -89,8 +92,8 @@ func (s *GrpcServer) ValidateToken(ctx context.Context, r *TokenRequest) (*Token
 	)
 
 	if isValid {
-		return CreateTokenResponse(true, "ok", nil), nil
+		return CreateTokenResponse(true, statusError, nil), nil
 	}
 
-	return CreateTokenResponse(false, "fail", nil), invalidToken
+	return CreateTokenResponse(false, statusError, nil), invalidToken
 }
