@@ -184,7 +184,6 @@ func TestDropToken(t *testing.T) {
 	validResp, err := s.DropToken(context.Background(), validReq)
 	assert.Nil(err)
 	assert.True(validResp.GetIsOk())
-	assert.Equal(token1.GetUserId(), validResp.GetToken().GetUserId())
 }
 
 func TestValidateToken(t *testing.T) {

@@ -71,7 +71,20 @@ func (s *GrpcServer) DropToken(ctx context.Context, r *TokenRequest) (*TokenResp
 		return CreateTokenResponse(false, statusError, nil), invalidReqSignature
 	}
 
-	return nil, nil
+    isValid := s.ts.Validate(
+        r.GetToken().GetUserId(),
+        r.GetToken().GetValue(),
+    )
+
+    if !isValid {
+        return CreateTokenResponse(false, statusError, nil), invalidToken
+    }
+
+    if err := s.ts.DropToken(r.GetToken().GetValue()); err != nil{
+        return  CreateTokenResponse(false, statusError, nil), err
+    }
+
+	return CreateTokenResponse(true, statusOk, nil), nil
 }
 
 func (s *GrpcServer) ValidateToken(ctx context.Context, r *TokenRequest) (*TokenResponse, error) {
