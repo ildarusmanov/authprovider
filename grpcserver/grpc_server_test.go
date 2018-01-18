@@ -12,6 +12,33 @@ import (
 
 const rvToken = "request validator token"
 
+func TestCreateToken(t *testing.T) {
+    var (
+        tValue = "ttt"
+        tUserId = "123"
+        tLifetime = 100
+        tTimestamp = time.Now().Unix()
+        tScope = []string{"all"}
+    )
+
+    token := CreateToken(
+        tValue,
+        tUserId,
+        int32(tLifetime),
+        tTimestamp,
+        tScope,
+    )
+
+    assert := assert.New(t)
+
+    if assert.NotNil(token) {
+        assert.Equal(tValue, token.GetValue())
+        assert.Equal(tUserId, token.GetUserId())
+        assert.Equal(tLifetime, token.GetLifetime())
+        assert.Equal(tScope, token.GetScope())
+    }
+}
+
 func TestCreateNewServer(t *testing.T) {
 	rv := services.CreateNewRequestValidator(rvToken)
 	p := providers.CreateNewMemoryTokenProvider()
