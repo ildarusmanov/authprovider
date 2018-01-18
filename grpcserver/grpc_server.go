@@ -7,11 +7,12 @@ import (
 )
 
 var (
-    invalidReqSignature = errors.New("signature not valid")
-    invalidToken = errors.New("invalid token")
-    statusOk = "ok"
-    statusError = "error"
+	invalidReqSignature = errors.New("signature not valid")
+	invalidToken        = errors.New("invalid token")
+	statusOk            = "ok"
+	statusError         = "error"
 )
+
 // request validator
 type requestValidator interface {
 	Validate(signature string, timestamp int64) bool
