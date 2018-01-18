@@ -286,5 +286,4 @@ func TestValidateToken(t *testing.T) {
 	validResp, err := s.ValidateToken(context.Background(), validReq)
 	assert.Nil(err)
 	assert.True(validResp.GetIsOk())
-	assert.Equal(token1.GetUserId(), validResp.GetToken().GetUserId())
 }
