@@ -8,6 +8,7 @@ import (
 
 var invalidReqSignature = errors.New("signature not valid")
 var invalidToken = errors.New("invalid token")
+
 // request validator
 type requestValidator interface {
 	Validate(signature string, timestamp int64) bool
@@ -18,7 +19,6 @@ type GrpcServer struct {
 	rv requestValidator
 	ts *services.TokenService
 }
-
 
 func CreateNewGrpcServer(rv requestValidator, p services.TokenProvider) *GrpcServer {
 	return &GrpcServer{rv, services.CreateNewTokenService(p)}
@@ -83,14 +83,14 @@ func (s *GrpcServer) ValidateToken(ctx context.Context, r *TokenRequest) (*Token
 		return CreateTokenResponse(false, "fail", nil), invalidReqSignature
 	}
 
-    isValid := s.ts.Validate(
-        r.GetToken().GetUserId(),
-        r.GetToken().GetValue(),
-    )
+	isValid := s.ts.Validate(
+		r.GetToken().GetUserId(),
+		r.GetToken().GetValue(),
+	)
 
-    if isValid {
-       return CreateTokenResponse(true, "ok", nil), nil 
-    }
+	if isValid {
+		return CreateTokenResponse(true, "ok", nil), nil
+	}
 
-    return CreateTokenResponse(false, "fail", nil), invalidToken
+	return CreateTokenResponse(false, "fail", nil), invalidToken
 }
