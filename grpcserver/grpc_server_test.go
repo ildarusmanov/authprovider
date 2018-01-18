@@ -16,7 +16,7 @@ func TestCreateToken(t *testing.T) {
 	var (
 		tValue     = "ttt"
 		tUserId    = "123"
-		tLifetime  = 100
+		tLifetime  = int32(100)
 		tTimestamp = time.Now().Unix()
 		tScope     = []string{"all"}
 	)
@@ -24,7 +24,7 @@ func TestCreateToken(t *testing.T) {
 	token := CreateToken(
 		tValue,
 		tUserId,
-		int32(tLifetime),
+		tLifetime,
 		tTimestamp,
 		tScope,
 	)
@@ -65,6 +65,36 @@ func TestCreateTokenResponse(t *testing.T) {
 		assert.Equal(resp.GetToken().GetTimestamp(), rToken.GetTimestamp())
 		assert.Equal(resp.GetToken().GetScope(), rToken.GetScope())
 	}
+
+}
+
+func TestCreateTokenRequest(t *testing.T) {
+    var (
+        rSignature = "signature"
+        rTimestamp = time.Now().Unix()
+        rToken  = CreateToken(
+            "ttt",
+            "123",
+            100,
+            time.Now().Unix(),
+            []string{"all"},
+        )
+    )
+
+    req := CreateTokenRequest(rSignature, rTimestamp, rToken)
+
+    assert := assert.New(t)
+    assert.Equal(req.GetSignature(), rSignature)
+    assert.Equal(req.GetTimestamp(), rTimestamp)
+
+    // validate token
+    if assert.NotNil(req.GetToken()) {
+        assert.Equal(req.GetToken().GetValue(), rToken.GetValue())
+        assert.Equal(req.GetToken().GetUserId(), rToken.GetUserId())
+        assert.Equal(req.GetToken().GetLifetime(), rToken.GetLifetime())
+        assert.Equal(req.GetToken().GetTimestamp(), rToken.GetTimestamp())
+        assert.Equal(req.GetToken().GetScope(), rToken.GetScope())
+    }   
 }
 
 func TestCreateNewServer(t *testing.T) {
