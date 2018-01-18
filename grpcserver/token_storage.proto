@@ -4,7 +4,6 @@ package grpcserver;
 
 service TokenStorage {
     rpc AddToken(TokenRequest) returns (TokenResponse) {}
-    rpc FindToken(TokenRequest) returns (TokenResponse) {}
     rpc DropToken(TokenRequest) returns (TokenResponse) {}
     rpc ValidateToken(TokenRequest) returns (TokenResponse) {}
 }
