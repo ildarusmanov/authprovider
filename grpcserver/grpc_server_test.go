@@ -39,6 +39,34 @@ func TestCreateToken(t *testing.T) {
     }
 }
 
+func TestCreateTokenResponse(t *testing.T) {
+    var (
+        rIsOk = true
+        rStatus = "status-text"
+        rToken = CreateToken(
+            "ttt",
+            "123",
+            100,
+            time.Now().Unix(),
+            []string{"all"},
+        )
+    )
+
+    resp := CreateTokenResponse(rIsOk, rStatus, rToken)
+
+    assert := assert.New(t)
+    assert.Equal(resp.GetIsOk(), rIsOk)
+    assert.Equal(resp.GetStatus(), rStatus)
+
+    if assert.NotNil(resp.GetToken()) {
+        assert.Equal(resp.GetToken().GetValue(), rToken.GetValue())
+        assert.Equal(resp.GetToken().GetUserId(), rToken.GetUserId())
+        assert.Equal(resp.GetToken().GetLifetime(), rToken.GetLifetime())
+        assert.Equal(resp.GetToken().GetTimestamp(), rToken.GetTimestamp())
+        assert.Equal(resp.GetToken().GetScope(), rToken.GetScope())
+    }
+}
+
 func TestCreateNewServer(t *testing.T) {
 	rv := services.CreateNewRequestValidator(rvToken)
 	p := providers.CreateNewMemoryTokenProvider()
