@@ -13,16 +13,16 @@ import (
 const rvToken = "request validator token"
 
 func TestStartServer(t *testing.T) {
-    v := services.CreateNewRequestValidator(rvToken)
-    p := providers.CreateNewMemoryTokenProvider()
+	v := services.CreateNewRequestValidator(rvToken)
+	p := providers.CreateNewMemoryTokenProvider()
 
-    srv, err := StartServer(v, p)
+	srv, err := StartServer(v, p)
 
-    assert := assert.New(t)
-    assert.NotNil(srv)
-    assert.Nil(err)
+	assert := assert.New(t)
+	assert.NotNil(srv)
+	assert.Nil(err)
 
-    srv.GracefulStop()
+	srv.GracefulStop()
 }
 
 func TestCreateToken(t *testing.T) {

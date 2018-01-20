@@ -4,6 +4,10 @@ import (
 	"errors"
 	"github.com/ildarusmanov/authprovider/services"
 	"golang.org/x/net/context"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
+	"log"
+	"net"
 )
 
 var (
@@ -22,6 +26,34 @@ type requestValidator interface {
 type GrpcServer struct {
 	rv requestValidator
 	ts *services.TokenService
+}
+
+func StartServer(rv requestValidator, p services.TokenProvider) (*grpc.Server, error) {
+	srv := CreateNewGrpcServer(rv, p)
+
+	lis, err := net.Listen("tcp", ":3333")
+
+	if err != nil {
+		return nil, err
+	}
+
+	opts := []grpc.ServerOption{}
+
+	if err != nil {
+		return nil, err
+	}
+
+	grpcServer := grpc.NewServer(opts...)
+
+	RegisterTokenStorageServer(grpcServer, srv)
+	// Register reflection service on gRPC server.
+	reflection.Register(grpcServer)
+
+	go func() {
+		log.Fatalf("failed to serve: %v", grpcServer.Serve(lis))
+	}()
+
+	return grpcServer, nil
 }
 
 func CreateNewGrpcServer(rv requestValidator, p services.TokenProvider) *GrpcServer {
