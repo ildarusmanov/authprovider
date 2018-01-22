@@ -8,6 +8,7 @@ before_script:
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
 intstall:
+  - go get github.com/axw/gocov/gocov
   - go get -u github.com/golang/dep/cmd/dep
   - dep ensure
 script:
