@@ -3,7 +3,7 @@ package providers
 import (
 	"errors"
 	"github.com/ildarusmanov/authprovider/models"
-	"github.com/satori/go.uuid"
+	"github.com/google/uuid"
 )
 
 // throw the exception when token not found
@@ -120,11 +120,5 @@ func (p *MemoryTokenProvider) init() {
 }
 
 func (p *MemoryTokenProvider) generateUniqueTokenValue() string {
-	t, err = uuid.NewV4().String()
-
-	if err != nil {
-		return ""
-	}
-
-	return t
+	return uuid.New().URN()
 }

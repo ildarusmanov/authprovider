@@ -14,16 +14,16 @@
   revision = "1e59b77b52bf8e4b449a57e6f79f21226d571845"
 
 [[projects]]
+  name = "github.com/google/uuid"
+  packages = ["."]
+  revision = "064e2069ce9c359c118179501254f67d7d37ba24"
+  version = "0.2"
+
+[[projects]]
   name = "github.com/pmezard/go-difflib"
   packages = ["difflib"]
   revision = "792786c7400a136282c1664665ae0a8db921c6c2"
   version = "v1.0.0"
-
-[[projects]]
-  name = "github.com/satori/go.uuid"
-  packages = ["."]
-  revision = "f58768cc1a7a7e77a3bd49e98cdd21419399b6a3"
-  version = "v1.2.0"
 
 [[projects]]
   name = "github.com/stretchr/objx"
@@ -64,6 +64,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "120dcf199c9685572e3783de33f0ab02a1360ead07f9565de0449052b2708942"
+  inputs-digest = "701c78aa70086e395892ebce28a86450d234e86e8cb4498fdf9e2c359cf8d237"
   solver-name = "gps-cdcl"
   solver-version = 1
