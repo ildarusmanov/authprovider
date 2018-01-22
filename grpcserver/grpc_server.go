@@ -46,7 +46,7 @@ func StartServer(rv requestValidator, p services.TokenProvider) (*grpc.Server, e
 	reflection.Register(grpcServer)
 
 	go func() {
-		log.Fatalf("failed to serve: %v", grpcServer.Serve(lis))
+		log.Fatalf("Grpc server terminated with: %v", grpcServer.Serve(lis))
 	}()
 
 	return grpcServer, nil

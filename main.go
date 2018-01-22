@@ -21,9 +21,16 @@ func main() {
 
 	log.Printf("[*] Ready")
 
-	v := services.CreateNewRequestValidator(*rvToken)
-	p := providers.CreateNewMemoryTokenProvider()
-	grpcserver.StartServer(v, p)
+	srv, err := grpcserver.StartServer(
+		services.CreateNewRequestValidator(*rvToken),
+		providers.CreateNewMemoryTokenProvider(),
+	)
+
+	if err != nil {
+		log.Fatalf("Can not start grpc server, error: %s", err)
+	}
+
+	defer srv.GracefulStop()
 
 	<-stop
 
