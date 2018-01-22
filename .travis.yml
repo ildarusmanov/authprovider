@@ -11,12 +11,13 @@ before_script:
 intstall:
   - go get -u github.com/golang/dep/cmd/dep
   - dep ensure
-script:
-  - go test -v -coverprofile=covergrpcserver.out ./grpcserver
-  - go test -v -coverprofile=covermodels.out ./models
-  - go test -v -coverprofile=coverproviders.out ./providers
-  - go test -v -coverprofile=coverservices.out ./services
-  - go test -v -coverprofile=coverhelpers.out ./helpers
-  - go test -v -coverprofile=c.out ./
+jobs:
+  include:
+    - script: go test -v -coverprofile=c.out ./grpcserver
+    - script: go test -v -coverprofile=c.out ./models
+    - script: go test -v -coverprofile=c.out ./providers
+    - script: go test -v -coverprofile=c.out ./services
+    - script: go test -v -coverprofile=c.out ./helpers
+    - script: go test -v -coverprofile=c.out ./
 after_script:
   - ./cc-test-reporter after-build -t gocov --exit-code $TRAVIS_TEST_RESULT
