@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/ildarusmanov/authprovider.svg?branch=master)](https://travis-ci.org/ildarusmanov/authprovider)
 [![Maintainability](https://api.codeclimate.com/v1/badges/a10ad1286a592257b2b1/maintainability)](https://codeclimate.com/github/ildarusmanov/authprovider/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/a10ad1286a592257b2b1/test_coverage)](https://codeclimate.com/github/ildarusmanov/authprovider/test_coverage)
 
 Token storage service
 
