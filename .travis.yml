@@ -1,6 +1,6 @@
 language: go
 go:
-  - 1.8.x
+  - 1.9.x
 env:
   - CC_TEST_REPORTER_ID=6e1b87f79ad425a664a7b826e6af4096519edebc580f6a70f6062dbe9f7273f6
 before_script:
@@ -12,6 +12,6 @@ intstall:
   - go get -u github.com/golang/dep/cmd/dep
   - dep ensure
 script:
-  - go test -v  -coverprofile=c.out ./grpcserver/ ./models/ ./providers ./services/
+  - go test -v  -coverprofile=c.out ./...
 after_script:
   - ./cc-test-reporter after-build -t gocov --exit-code $TRAVIS_TEST_RESULT
