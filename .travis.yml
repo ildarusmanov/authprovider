@@ -14,4 +14,4 @@ intstall:
 script:
   - go test -v ./grpcserver/ ./models/ ./providers ./services/
 after_script:
-  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+  - ./cc-test-reporter after-build --exit-code -t gocov $TRAVIS_TEST_RESULT
