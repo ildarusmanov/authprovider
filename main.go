@@ -1,19 +1,19 @@
 package main
 
 import (
-    "os"
-    "os/signal"
-    "log"
+	"log"
+	"os"
+	"os/signal"
 )
 
 func main() {
-    log.Printf("[*] Starting")
-    stop := make(chan os.Signal, 1)
-    signal.Notify(stop, os.Interrupt)
+	log.Printf("[*] Starting")
+	stop := make(chan os.Signal, 1)
+	signal.Notify(stop, os.Interrupt)
 
-    log.Printf("[*] Ready")
+	log.Printf("[*] Ready")
 
-    <- stop
+	<-stop
 
-    log.Printf("[*] Finished")
+	log.Printf("[*] Finished")
 }

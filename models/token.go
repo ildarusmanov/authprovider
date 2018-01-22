@@ -38,7 +38,7 @@ func (t *Token) initScope() {
 	}
 }
 
-// get token user id 
+// get token user id
 func (t *Token) GetTokenUserId() string {
 	return t.tokenUserId
 }
