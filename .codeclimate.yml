@@ -1,0 +1,5 @@
+exclude_paths:
+  - "**/*_test.go"
+  - "*_test.go"
+  - "grpcserver/token_storage.pb.go"
+  - "vendor/"
