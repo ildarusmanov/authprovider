@@ -1,8 +1,16 @@
 language: go
 go:
   - 1.8.x
+env:
+  - CC_TEST_REPORTER_ID=6e1b87f79ad425a664a7b826e6af4096519edebc580f6a70f6062dbe9f7273f6
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
 intstall:
   - go get -u github.com/golang/dep/cmd/dep
   - dep ensure
 script:
   - go test -v ./grpcserver/ ./models/ ./providers ./services/
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
