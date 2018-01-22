@@ -12,4 +12,17 @@ git clone
 go get
 // https://github.com/golang/dep
 dep ensure
+// run tests
+go test -v ./grpcserver/ ./models/ ./providers ./services/
+```
+
+# Run with Docker
+
+```
+// move to directory
+cd [authprovider directory]
+// build
+sudo docker build -t authprovider .
+// run
+sudo docker run -p 8000:8000 --network host authprovider 
 ```
