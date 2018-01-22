@@ -12,6 +12,6 @@ intstall:
   - go get -u github.com/golang/dep/cmd/dep
   - dep ensure
 script:
-  - go test -v ./grpcserver/ ./models/ ./providers ./services/
+  - go test -v  -coverprofile=c.out ./grpcserver/ ./models/ ./providers ./services/
 after_script:
   - ./cc-test-reporter after-build -t gocov --exit-code $TRAVIS_TEST_RESULT
