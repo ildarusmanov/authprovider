@@ -39,10 +39,6 @@ func StartServer(rv requestValidator, p services.TokenProvider) (*grpc.Server, e
 
 	opts := []grpc.ServerOption{}
 
-	if err != nil {
-		return nil, err
-	}
-
 	grpcServer := grpc.NewServer(opts...)
 
 	RegisterTokenStorageServer(grpcServer, srv)
