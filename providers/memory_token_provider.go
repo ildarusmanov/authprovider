@@ -2,8 +2,8 @@ package providers
 
 import (
 	"errors"
-	"github.com/ildarusmanov/authprovider/models"
 	"github.com/google/uuid"
+	"github.com/ildarusmanov/authprovider/models"
 )
 
 // throw the exception when token not found
