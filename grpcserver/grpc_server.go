@@ -31,7 +31,7 @@ type GrpcServer struct {
 func StartServer(rv requestValidator, p services.TokenProvider) (*grpc.Server, error) {
 	srv := CreateNewGrpcServer(rv, p)
 
-	lis, err := net.Listen("tcp", "0.0.0.0:3333")
+	lis, err := net.Listen("tcp", ":8000")
 
 	if err != nil {
 		return nil, err
