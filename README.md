@@ -1,5 +1,7 @@
 # Authprovider
 
+[![Build Status](https://travis-ci.org/ildarusmanov/authprovider.svg?branch=master)](https://travis-ci.org/ildarusmanov/authprovider)
+
 Token storage service
 
 # Install

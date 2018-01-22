@@ -120,5 +120,11 @@ func (p *MemoryTokenProvider) init() {
 }
 
 func (p *MemoryTokenProvider) generateUniqueTokenValue() string {
-	return uuid.NewV4().String()
+	t, err = uuid.NewV4().String()
+
+	if err != nil {
+		return ""
+	}
+
+	return t
 }
