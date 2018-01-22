@@ -22,7 +22,7 @@ func TestStartServer(t *testing.T) {
 	assert.NotNil(srv)
 	assert.Nil(err)
 
-	srv.GracefulStop()
+	// srv.GracefulStop()
 }
 
 func TestCreateToken(t *testing.T) {
