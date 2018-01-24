@@ -8,9 +8,11 @@ Token storage service
 
 # Install
 ```
-git clone 
+git clone https://github.com/ildarusmanov/authprovider
 // or
-go get
+go get github.com/ildarusmanov/authprovider
+// move to project directory
+cd [authprovider dicrectory]
 // https://github.com/golang/dep
 dep ensure
 // run tests
@@ -27,3 +29,4 @@ sudo docker build -t authprovider .
 // run
 sudo docker run -p 8000:8000 --network host authprovider 
 ```
+
