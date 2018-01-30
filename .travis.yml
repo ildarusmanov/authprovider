@@ -6,13 +6,19 @@ env:
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
-  - go get -u github.com/AlekSi/gocoverutil
-  - go get github.com/axw/gocov/gocov
+  - go get golang.org/x/tools/cmd/cover
+  - go get github.com/modocache/gover
   - ./cc-test-reporter before-build
 intstall:
   - go get -u github.com/golang/dep/cmd/dep
   - dep ensure
 script:
-  - gocoverutil -coverprofile=c.out test -v -covermode=count ./grpcserver ./models ./providers ./helpers ./
+  - go test -cover -coverpkg github.com/ildarusmanov/authprovider -coverprofile authprovider.coverprofile      .
+  - go test -cover -coverpkg github.com/ildarusmanov/authprovider/services -coverprofile services.coverprofile ./services
+  - go test -cover -coverpkg github.com/ildarusmanov/authprovider/grpcserver -coverprofile grpcserver.coverprofile ./grpcserver
+  - go test -cover -coverpkg github.com/ildarusmanov/authprovider/helpers -coverprofile helpers.coverprofile ./helpers
+  - go test -cover -coverpkg github.com/ildarusmanov/authprovider/models -coverprofile models.coverprofile ./models
+  - go test -cover -coverpkg github.com/ildarusmanov/authprovider/providers -coverprofile providers.coverprofile ./providers
 after_script:
+  - gover ./ c.out
   - ./cc-test-reporter after-build -t gocov --exit-code $TRAVIS_TEST_RESULT
