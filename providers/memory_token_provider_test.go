@@ -11,7 +11,7 @@ func TestCreateNewMemoryTokenProvider(t *testing.T) {
 	assert.NotNil(t, p)
 }
 
-func TestAddToken(t *testing.T) {
+func TestMemoryTokenProviderAddToken(t *testing.T) {
 	var (
 		assert         = assert.New(t)
 		userId         = "111"
@@ -34,7 +34,7 @@ func TestAddToken(t *testing.T) {
 	}
 }
 
-func TestFindByValue(t *testing.T) {
+func TestMemoryTokenProviderFindByValue(t *testing.T) {
 	var (
 		anotherTokenValue = "token value 123"
 		assert            = assert.New(t)
@@ -64,7 +64,7 @@ func TestFindByValue(t *testing.T) {
 	assert.NotNil(err)
 }
 
-func TestDropToken(t *testing.T) {
+func TestMemoryTokenProviderDropToken(t *testing.T) {
 	var (
 		assert    = assert.New(t)
 		userId    = "111"
@@ -89,7 +89,7 @@ func TestDropToken(t *testing.T) {
 	assert.Nil(token)
 }
 
-func TestDropByUserId(t *testing.T) {
+func TestMemoryTokenProviderDropByUserId(t *testing.T) {
 	var (
 		assert    = assert.New(t)
 		userId    = "111"
@@ -112,7 +112,7 @@ func TestDropByUserId(t *testing.T) {
 	assert.NotNil(err)
 }
 
-func TestDropAll(t *testing.T) {
+func TestMemoryTokenProviderDropAll(t *testing.T) {
 	var (
 		assert    = assert.New(t)
 		userId    = "111"

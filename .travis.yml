@@ -1,6 +1,8 @@
 language: go
 go:
   - 1.9.x
+services:
+  - redis-server
 env:
   - CC_TEST_REPORTER_ID=6e1b87f79ad425a664a7b826e6af4096519edebc580f6a70f6062dbe9f7273f6
 before_script:
